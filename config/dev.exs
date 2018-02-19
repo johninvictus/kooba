@@ -7,7 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :kooba_server, KoobaServerWeb.Endpoint,
-  http: [port: 4000],
+  http: [port: 5000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -44,3 +44,6 @@ config :kooba_server, KoobaServer.Repo,
   database: "kooba_server_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :kooba_server, KoobaServer.Guardian,
+  secret_key: "LG17BzmhBeq81Yyyn6vH7GVdrCkQpLktol2vdXlBzkRRHpYsZwluKMG9r6fnu90m"

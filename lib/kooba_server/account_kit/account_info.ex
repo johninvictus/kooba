@@ -20,12 +20,12 @@ defmodule KoobaServer.AccountKit.AccountInfo do
   end
 
   def get_response(url) do
-    try do
-      url |> HTTPoison.get!() |> decode_response()
-    rescue
-      _ ->
-        {:error, "Error occured"}
-    end
+    # try do
+    url |> HTTPoison.get!() |> decode_response()
+    # rescue
+    #   _ ->
+    #     {:error, "Error occured when gettting API #rescue"}
+    # end
   end
 
   def decode_response(%HTTPoison.Response{body: body, status_code: 200}) do
@@ -42,7 +42,7 @@ defmodule KoobaServer.AccountKit.AccountInfo do
         {:ok, account}
 
       _ ->
-        {:error, "Error occured"}
+        {:error, "Error decoding response using Poison"}
     end
   end
 
@@ -52,6 +52,6 @@ defmodule KoobaServer.AccountKit.AccountInfo do
   end
 
   def decode_response(_) do
-    {:error, "An error occured"}
+    {:error, "Error when decoding response #unknown response"}
   end
 end

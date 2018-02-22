@@ -64,4 +64,62 @@ defmodule KoobaServer.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end
+
+  describe "user_details" do
+    alias KoobaServer.Accounts.UserDetail
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def user_detail_fixture(attrs \\ %{}) do
+      {:ok, user_detail} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_user_detail()
+
+      user_detail
+    end
+
+    test "list_user_details/0 returns all user_details" do
+      user_detail = user_detail_fixture()
+      assert Accounts.list_user_details() == [user_detail]
+    end
+
+    test "get_user_detail!/1 returns the user_detail with given id" do
+      user_detail = user_detail_fixture()
+      assert Accounts.get_user_detail!(user_detail.id) == user_detail
+    end
+
+    test "create_user_detail/1 with valid data creates a user_detail" do
+      assert {:ok, %UserDetail{} = user_detail} = Accounts.create_user_detail(@valid_attrs)
+    end
+
+    test "create_user_detail/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user_detail(@invalid_attrs)
+    end
+
+    test "update_user_detail/2 with valid data updates the user_detail" do
+      user_detail = user_detail_fixture()
+      assert {:ok, user_detail} = Accounts.update_user_detail(user_detail, @update_attrs)
+      assert %UserDetail{} = user_detail
+    end
+
+    test "update_user_detail/2 with invalid data returns error changeset" do
+      user_detail = user_detail_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user_detail(user_detail, @invalid_attrs)
+      assert user_detail == Accounts.get_user_detail!(user_detail.id)
+    end
+
+    test "delete_user_detail/1 deletes the user_detail" do
+      user_detail = user_detail_fixture()
+      assert {:ok, %UserDetail{}} = Accounts.delete_user_detail(user_detail)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user_detail!(user_detail.id) end
+    end
+
+    test "change_user_detail/1 returns a user_detail changeset" do
+      user_detail = user_detail_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_user_detail(user_detail)
+    end
+  end
 end

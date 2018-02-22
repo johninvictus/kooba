@@ -8,6 +8,8 @@ defmodule KoobaServerWeb.SessionController do
   alias KoobaServer.Guardian
   # alias KoobaServer.AccountKit.AccessToken.Token
 
+  action_fallback(KoobaServerWeb.FallbackController)
+
   def create(conn, %{"authorization_code" => auth_code, "number" => number}) do
     # check if an account is present
     # if not present store it and then fetch token and store it or update it if present
@@ -19,10 +21,22 @@ defmodule KoobaServerWeb.SessionController do
       # check if user exist if :true render response :false insert the details and then return response
       if account_data.number == number do
         case Accounts.get_user_by_phone(number) do
-          {:ok, user} ->
-            update_user = %{user | access_token: access_token_bundle.access_token}
+          user when is_map(user) ->
+            Accounts.update_user(user, %{access_token: access_token_bundle.access_token})
 
-            conn |> render("show.json", auth_code: "All is well")
+            new_connection = Guardian.Plug.sign_in(conn, user)
+            token = Guardian.Plug.current_token(new_connection)
+
+            details_provided = user |> user_details_provided()
+
+            new_connection
+            |> put_status(:ok)
+            |> render(
+              "show.json",
+              token: token,
+              user: user,
+              details_provided: details_provided
+            )
 
           nil ->
             new_user = %{
@@ -36,17 +50,34 @@ defmodule KoobaServerWeb.SessionController do
               new_connection = Guardian.Plug.sign_in(conn, user)
               token = Guardian.Plug.current_token(new_connection)
 
+              details_provided = user |> user_details_provided()
+
               new_connection
               |> put_status(:created)
-              |> render("show.json", auth_code: "guardian token: #{token}")
+              |> render(
+                "show.json",
+                token: token,
+                user: user,
+                details_provided: details_provided
+              )
             end
         end
       else
-        conn |> render("show.json", auth_code: "")
+        {:error, :credential_error, "Number from the api does not match the number provided"}
       end
     else
       {:error, reason} ->
-        conn |> render("show.json", auth_code: "#{reason}error #{number}")
+        {:error, :credential_error, reason}
+    end
+  end
+
+  defp user_details_provided(user) do
+    case Accounts.get_user_detail(user) do
+      nil ->
+        false
+
+      _ ->
+        true
     end
   end
 end

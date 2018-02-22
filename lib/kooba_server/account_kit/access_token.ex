@@ -17,12 +17,7 @@ defmodule KoobaServer.AccountKit.AccessToken do
   end
 
   def get_response(url) do
-    try do
-      HTTPoison.get!(url) |> decode_response()
-    rescue
-      _ ->
-        {:error, "Error occured"}
-    end
+    HTTPoison.get!(url) |> decode_response()
   end
 
   def decode_response(%HTTPoison.Response{body: body, status_code: 200}) do
@@ -39,7 +34,7 @@ defmodule KoobaServer.AccountKit.AccessToken do
         {:ok, access_token}
 
       _ ->
-        {:error, "Error occured"}
+        {:error, "Error decoding token response"}
     end
   end
 
@@ -49,7 +44,7 @@ defmodule KoobaServer.AccountKit.AccessToken do
   end
 
   def decode_response(_) do
-    {:error, "An error occured"}
+    {:error, "Error, decoding response #token #decode_response"}
   end
 
   defp get_app_id do

@@ -11,8 +11,11 @@ defmodule KoobaServerWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{id: user.id,
-      phone: user.phone,
-      access_token: user.access_token}
+    %{
+      id: user.id,
+      country_prefix: user.country_prefix,
+      national_number: user.national_number,
+      phone: user.phone
+    }
   end
 end

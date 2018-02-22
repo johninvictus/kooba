@@ -17,4 +17,10 @@ defmodule KoobaServerWeb.FallbackController do
     |> put_status(:not_found)
     |> render(KoobaServerWeb.ErrorView, :"404")
   end
+
+  def call(conn, {:error, :credential_error, message}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> render(KoobaServerWeb.ErrorView, "error.json", message: message)
+  end
 end

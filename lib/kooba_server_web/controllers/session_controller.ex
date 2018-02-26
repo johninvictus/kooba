@@ -10,7 +10,7 @@ defmodule KoobaServerWeb.SessionController do
 
   action_fallback(KoobaServerWeb.FallbackController)
 
-  def create(conn, %{"authorization_code" => auth_code, "number" => number}) do
+  def create(conn, %{"authorization_code" => auth_code}) do
     # check if an account is present
     # if not present store it and then fetch token and store it or update it if present
     # return jwt using guardian
@@ -19,8 +19,8 @@ defmodule KoobaServerWeb.SessionController do
          {:ok, account_data} <- AccountKit.get_user_info(access_token_bundle.access_token) do
       # check if number from server matches with the one sent
       # check if user exist if :true render response :false insert the details and then return response
-      if account_data.number == number do
-        case Accounts.get_user_by_phone(number) do
+
+        case Accounts.get_user_by_phone(account_data.number) do
           user when is_map(user) ->
             Accounts.update_user(user, %{access_token: access_token_bundle.access_token})
 
@@ -62,9 +62,6 @@ defmodule KoobaServerWeb.SessionController do
               )
             end
         end
-      else
-        {:error, :credential_error, "Number from the api does not match the number provided"}
-      end
     else
       {:error, reason} ->
         {:error, :credential_error, reason}

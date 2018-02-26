@@ -17,7 +17,7 @@ defmodule KoobaServer.AccountKit.AccessToken do
   end
 
   def get_response(url) do
-    HTTPoison.get!(url) |> decode_response()
+    HTTPoison.get(url, [], [timeout: 50_000, recv_timeout: 50_000]) |> decode_response()
   end
 
   def decode_response(%HTTPoison.Response{body: body, status_code: 200}) do

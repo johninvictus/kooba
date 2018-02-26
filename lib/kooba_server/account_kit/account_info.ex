@@ -21,7 +21,7 @@ defmodule KoobaServer.AccountKit.AccountInfo do
 
   def get_response(url) do
     # try do
-    url |> HTTPoison.get!() |> decode_response()
+    url |> HTTPoison.get( [], [timeout: 50_000, recv_timeout: 50_000]) |> decode_response()
     # rescue
     #   _ ->
     #     {:error, "Error occured when gettting API #rescue"}

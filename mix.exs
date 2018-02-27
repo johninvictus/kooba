@@ -41,7 +41,8 @@ defmodule KoobaServer.Mixfile do
       {:cowboy, "~> 1.0"},
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
-      {:guardian, "~> 1.0"}
+      {:guardian, "~> 1.0"},
+      {:cors_plug, "~> 1.5"}
     ]
   end
 

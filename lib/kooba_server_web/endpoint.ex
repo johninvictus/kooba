@@ -36,6 +36,7 @@ defmodule KoobaServerWeb.Endpoint do
     key: "_kooba_server_key",
     signing_salt: "27a06ps9"
 
+  plug CORSPlug
   plug KoobaServerWeb.Router
 
   @doc """

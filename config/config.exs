@@ -24,11 +24,6 @@ config :kooba_server, :facebook_account_kit,
   app_secret: "e2bb65762d42386629bb47838c7a2ded",
   facebook_app_id: "588042518246985"
 
-config :kooba_server, KoobaServer.Guardian,
-  issuer: "kooba_server",
-  ttl: {30, :days},
-  verify_issuer: true
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

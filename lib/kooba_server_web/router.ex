@@ -20,5 +20,6 @@ defmodule KoobaServerWeb.Router do
     pipe_through([:api, :api_auth])
 
     resources("/users", UserController, except: [:new, :edit])
+    get("/user/credentials", CredentialsController, :index)
   end
 end

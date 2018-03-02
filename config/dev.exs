@@ -46,4 +46,6 @@ config :kooba_server, KoobaServer.Repo,
   pool_size: 10
 
 config :kooba_server, KoobaServer.Guardian,
+  issuer: "kooba_server",
+  ttl: {30, :days},
   secret_key: "LG17BzmhBeq81Yyyn6vH7GVdrCkQpLktol2vdXlBzkRRHpYsZwluKMG9r6fnu90m"

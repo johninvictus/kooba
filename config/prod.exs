@@ -21,7 +21,10 @@ config :kooba_server, KoobaServerWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :kooba_server, KoobaServer.Guardian, secret_key: System.get_env("GUARDIAN_SECRET_KEY")
+config :kooba_server, KoobaServer.Guardian,
+  issuer: "kooba_server",
+  ttl: {30, :days},
+  secret_key: System.get_env("GUARDIAN_SECRET_KEY")
 
 # ## SSL Support
 #

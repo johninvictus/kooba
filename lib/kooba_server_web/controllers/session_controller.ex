@@ -20,48 +20,46 @@ defmodule KoobaServerWeb.SessionController do
       # check if number from server matches with the one sent
       # check if user exist if :true render response :false insert the details and then return response
 
-        case Accounts.get_user_by_phone(account_data.number) do
-          user when is_map(user) ->
-            Accounts.update_user(user, %{access_token: access_token_bundle.access_token})
+      case Accounts.get_user_by_phone(account_data.number) do
+        user when is_map(user) ->
+          Accounts.update_user(user, %{access_token: access_token_bundle.access_token})
 
-            new_connection = Guardian.Plug.sign_in(conn, user)
-            token = Guardian.Plug.current_token(new_connection)
+          {:ok, token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: :access)
+
+          details_provided = user |> user_details_provided()
+
+          conn
+          |> put_status(:ok)
+          |> render(
+            "show.json",
+            token: token,
+            user: user,
+            details_provided: details_provided
+          )
+
+        nil ->
+          new_user = %{
+            phone: account_data.number,
+            access_token: access_token_bundle.access_token,
+            country_prefix: account_data.country_prefix,
+            national_number: account_data.national_number
+          }
+
+          with {:ok, user} <- Accounts.create_user(new_user) do
+            {:ok, token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: :access)
 
             details_provided = user |> user_details_provided()
 
-            new_connection
-            |> put_status(:ok)
+            conn
+            |> put_status(:created)
             |> render(
               "show.json",
               token: token,
               user: user,
               details_provided: details_provided
             )
-
-          nil ->
-            new_user = %{
-              phone: account_data.number,
-              access_token: access_token_bundle.access_token,
-              country_prefix: account_data.country_prefix,
-              national_number: account_data.national_number
-            }
-
-            with {:ok, user} <- Accounts.create_user(new_user) do
-              new_connection = Guardian.Plug.sign_in(conn, user)
-              token = Guardian.Plug.current_token(new_connection)
-
-              details_provided = user |> user_details_provided()
-
-              new_connection
-              |> put_status(:created)
-              |> render(
-                "show.json",
-                token: token,
-                user: user,
-                details_provided: details_provided
-              )
-            end
-        end
+          end
+      end
     else
       {:error, reason} ->
         {:error, :credential_error, reason}

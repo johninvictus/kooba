@@ -5,21 +5,8 @@ defmodule KoobaServerWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  pipeline :unauthorized do
-    plug(:fetch_session)
-  end
-
-  pipeline :authorized do
-    plug(:fetch_session)
-
-    plug(
-      Guardian.Plug.Pipeline,
-      module: KoobaServer.Guardian,
-      error_handler: KoobaServer.Guardian.AuthErrorHandler
-    )
-
-    plug(Guardian.Plug.VerifySession)
-    plug(Guardian.Plug.LoadResource)
+  pipeline :api_auth do
+    plug(KoobaServer.Guardian.AuthPipeline)
   end
 
   scope "/api", KoobaServerWeb do
@@ -27,6 +14,11 @@ defmodule KoobaServerWeb.Router do
 
     get("/", WelcomeController, :index)
     post("/sessions", SessionController, :create)
+  end
+
+  scope "/api", KoobaServerWeb do
+    pipe_through([:api, :api_auth])
+
     resources("/users", UserController, except: [:new, :edit])
   end
 end

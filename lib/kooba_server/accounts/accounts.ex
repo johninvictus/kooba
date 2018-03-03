@@ -55,7 +55,6 @@ defmodule KoobaServer.Accounts do
     |> Repo.insert()
   end
 
-
   @doc """
   Updates a user.
 
@@ -139,7 +138,7 @@ defmodule KoobaServer.Accounts do
   def get_user_detail(user) do
     user
     |> Ecto.assoc(:user_details)
-    |> Repo.one
+    |> Repo.one()
   end
 
   @doc """
@@ -155,10 +154,20 @@ defmodule KoobaServer.Accounts do
 
   """
   def create_user_detail(%User{} = user, attrs \\ %{}) do
-    user
-    |> Ecto.build_assoc(:user_details)
-    |> UserDetail.changeset(attrs)
-    |> Repo.insert()
+    # create just one entry
+    case get_user_detail(user) do
+      nil ->
+        # can return either changeset or true
+        user
+        |> Ecto.build_assoc(:user_details)
+        |> UserDetail.changeset(attrs)
+        |> Repo.insert()
+
+      details when is_map(details) ->
+        # update data maybe instead returning the old data
+        # may return {:ok, updated_detail} or {:ok, changeset}
+        update_user_detail(details, attrs)
+    end
   end
 
   @doc """

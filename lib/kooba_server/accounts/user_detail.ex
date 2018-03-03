@@ -16,9 +16,8 @@ defmodule KoobaServer.Accounts.UserDetail do
   @doc false
   def changeset(%UserDetail{} = user_detail, attrs) do
     user_detail
-    |> cast(attrs, [:user_id, :national_card, :first_name, :second_name])
-    |> validate_required([:user_id, :national_card, :first_name, :second_name])
-    |> validate_length(:national_card, min: 6, max: 8)
+    |> cast(attrs, [:user_id, :national_card, :full_name, :birth_date])
+    |> validate_required([:user_id, :national_card, :full_name, :birth_date])
     |> unique_constraint(:national_card)
     |> assoc_constraint(:user)
   end

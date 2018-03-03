@@ -21,5 +21,7 @@ defmodule KoobaServerWeb.Router do
 
     resources("/users", UserController, except: [:new, :edit])
     get("/user/credentials", CredentialsController, :index)
+    # update or create
+    post("/user/credentials", CredentialsController, :create)
   end
 end

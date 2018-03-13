@@ -10,6 +10,7 @@ defmodule KoobaServer.Accounts.User do
     field(:national_number, :integer)
 
     has_one(:user_details, KoobaServer.Accounts.UserDetail)
+    has_one(:loan_limit, KoobaServer.MicroFinance.LoanLimit)
 
     timestamps()
   end

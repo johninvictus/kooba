@@ -2,6 +2,7 @@ defmodule KoobaServer.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias KoobaServer.Accounts.User
+  alias KoobaServer.MicroFinance.LoanLimit
 
   schema "users" do
     field(:access_token, :string)
@@ -21,5 +22,10 @@ defmodule KoobaServer.Accounts.User do
     |> cast(attrs, [:phone, :access_token, :country_prefix, :national_number])
     |> validate_required([:phone, :access_token])
     |> unique_constraint(:phone)
+  end
+
+  def build(attrs \\ Map.new) do
+    changeset(%User{}, attrs)
+    |> put_assoc(:loan_limit, LoanLimit.build_initial_limit())
   end
 end

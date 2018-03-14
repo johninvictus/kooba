@@ -4,9 +4,11 @@ defmodule KoobaServer.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias KoobaServer.Repo
+  import Ecto.Changeset
 
+  alias KoobaServer.Repo
   alias KoobaServer.Accounts.User
+
 
   @doc """
   Returns the list of users.
@@ -50,8 +52,7 @@ defmodule KoobaServer.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
+     User.build(attrs)
     |> Repo.insert()
   end
 

@@ -3,6 +3,7 @@ defmodule KoobaServer.MicroFinance.LoanLimit do
   import Ecto.Changeset
   alias KoobaServer.MicroFinance.LoanLimit
 
+ @status_includes ~w(active suspended)
 
   schema "loan_limits" do
     field :amount, :integer
@@ -19,5 +20,11 @@ defmodule KoobaServer.MicroFinance.LoanLimit do
     loan_limit
     |> cast(attrs, [:amount, :status, :suspended_until])
     |> validate_required([:amount, :status, :suspended_until])
+    |> validate_inclusion(:status, @status_includes)
+    |> assoc_constraint(:user)
+  end
+
+  def build_initial_limit() do
+    changeset %LoanLimit{}, %{amount: 227, status: "active", suspended_until: "00"}
   end
 end

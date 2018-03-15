@@ -134,4 +134,142 @@ defmodule KoobaServer.MicroFinanceTest do
       assert %Ecto.Changeset{} = MicroFinance.change_loan_limit(loan_limit)
     end
   end
+
+  describe "loans_taken" do
+    alias KoobaServer.MicroFinance.LoanTaken
+
+    @valid_attrs %{late_fee: 42, loan_amount: 42, loan_interest: 42, loan_total: 42, next_payment_id: 42, notified_count: 42, status: "some status"}
+    @update_attrs %{late_fee: 43, loan_amount: 43, loan_interest: 43, loan_total: 43, next_payment_id: 43, notified_count: 43, status: "some updated status"}
+    @invalid_attrs %{late_fee: nil, loan_amount: nil, loan_interest: nil, loan_total: nil, next_payment_id: nil, notified_count: nil, status: nil}
+
+    def loan_taken_fixture(attrs \\ %{}) do
+      {:ok, loan_taken} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> MicroFinance.create_loan_taken()
+
+      loan_taken
+    end
+
+    test "list_loans_taken/0 returns all loans_taken" do
+      loan_taken = loan_taken_fixture()
+      assert MicroFinance.list_loans_taken() == [loan_taken]
+    end
+
+    test "get_loan_taken!/1 returns the loan_taken with given id" do
+      loan_taken = loan_taken_fixture()
+      assert MicroFinance.get_loan_taken!(loan_taken.id) == loan_taken
+    end
+
+    test "create_loan_taken/1 with valid data creates a loan_taken" do
+      assert {:ok, %LoanTaken{} = loan_taken} = MicroFinance.create_loan_taken(@valid_attrs)
+      assert loan_taken.late_fee == 42
+      assert loan_taken.loan_amount == 42
+      assert loan_taken.loan_interest == 42
+      assert loan_taken.loan_total == 42
+      assert loan_taken.next_payment_id == 42
+      assert loan_taken.notified_count == 42
+      assert loan_taken.status == "some status"
+    end
+
+    test "create_loan_taken/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = MicroFinance.create_loan_taken(@invalid_attrs)
+    end
+
+    test "update_loan_taken/2 with valid data updates the loan_taken" do
+      loan_taken = loan_taken_fixture()
+      assert {:ok, loan_taken} = MicroFinance.update_loan_taken(loan_taken, @update_attrs)
+      assert %LoanTaken{} = loan_taken
+      assert loan_taken.late_fee == 43
+      assert loan_taken.loan_amount == 43
+      assert loan_taken.loan_interest == 43
+      assert loan_taken.loan_total == 43
+      assert loan_taken.next_payment_id == 43
+      assert loan_taken.notified_count == 43
+      assert loan_taken.status == "some updated status"
+    end
+
+    test "update_loan_taken/2 with invalid data returns error changeset" do
+      loan_taken = loan_taken_fixture()
+      assert {:error, %Ecto.Changeset{}} = MicroFinance.update_loan_taken(loan_taken, @invalid_attrs)
+      assert loan_taken == MicroFinance.get_loan_taken!(loan_taken.id)
+    end
+
+    test "delete_loan_taken/1 deletes the loan_taken" do
+      loan_taken = loan_taken_fixture()
+      assert {:ok, %LoanTaken{}} = MicroFinance.delete_loan_taken(loan_taken)
+      assert_raise Ecto.NoResultsError, fn -> MicroFinance.get_loan_taken!(loan_taken.id) end
+    end
+
+    test "change_loan_taken/1 returns a loan_taken changeset" do
+      loan_taken = loan_taken_fixture()
+      assert %Ecto.Changeset{} = MicroFinance.change_loan_taken(loan_taken)
+    end
+  end
+
+  describe "loan_payments" do
+    alias KoobaServer.MicroFinance.LoanPayment
+
+    @valid_attrs %{amount: "some amount", payment_schedue: "some payment_schedue", status: "some status", type: "some type"}
+    @update_attrs %{amount: "some updated amount", payment_schedue: "some updated payment_schedue", status: "some updated status", type: "some updated type"}
+    @invalid_attrs %{amount: nil, payment_schedue: nil, status: nil, type: nil}
+
+    def loan_payment_fixture(attrs \\ %{}) do
+      {:ok, loan_payment} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> MicroFinance.create_loan_payment()
+
+      loan_payment
+    end
+
+    test "list_loan_payments/0 returns all loan_payments" do
+      loan_payment = loan_payment_fixture()
+      assert MicroFinance.list_loan_payments() == [loan_payment]
+    end
+
+    test "get_loan_payment!/1 returns the loan_payment with given id" do
+      loan_payment = loan_payment_fixture()
+      assert MicroFinance.get_loan_payment!(loan_payment.id) == loan_payment
+    end
+
+    test "create_loan_payment/1 with valid data creates a loan_payment" do
+      assert {:ok, %LoanPayment{} = loan_payment} = MicroFinance.create_loan_payment(@valid_attrs)
+      assert loan_payment.amount == "some amount"
+      assert loan_payment.payment_schedue == "some payment_schedue"
+      assert loan_payment.status == "some status"
+      assert loan_payment.type == "some type"
+    end
+
+    test "create_loan_payment/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = MicroFinance.create_loan_payment(@invalid_attrs)
+    end
+
+    test "update_loan_payment/2 with valid data updates the loan_payment" do
+      loan_payment = loan_payment_fixture()
+      assert {:ok, loan_payment} = MicroFinance.update_loan_payment(loan_payment, @update_attrs)
+      assert %LoanPayment{} = loan_payment
+      assert loan_payment.amount == "some updated amount"
+      assert loan_payment.payment_schedue == "some updated payment_schedue"
+      assert loan_payment.status == "some updated status"
+      assert loan_payment.type == "some updated type"
+    end
+
+    test "update_loan_payment/2 with invalid data returns error changeset" do
+      loan_payment = loan_payment_fixture()
+      assert {:error, %Ecto.Changeset{}} = MicroFinance.update_loan_payment(loan_payment, @invalid_attrs)
+      assert loan_payment == MicroFinance.get_loan_payment!(loan_payment.id)
+    end
+
+    test "delete_loan_payment/1 deletes the loan_payment" do
+      loan_payment = loan_payment_fixture()
+      assert {:ok, %LoanPayment{}} = MicroFinance.delete_loan_payment(loan_payment)
+      assert_raise Ecto.NoResultsError, fn -> MicroFinance.get_loan_payment!(loan_payment.id) end
+    end
+
+    test "change_loan_payment/1 returns a loan_payment changeset" do
+      loan_payment = loan_payment_fixture()
+      assert %Ecto.Changeset{} = MicroFinance.change_loan_payment(loan_payment)
+    end
+  end
 end

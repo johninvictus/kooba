@@ -1,4 +1,42 @@
 defmodule KoobaServer.Money do
+  @moduledoc ~S"""
+  `Money` represents some monetary value (stored in cents) in a given currency.
+
+  See `Money.Ecto` for a custom type implementation that can be used in schemas.
+
+  In order to use the `~M` sigil, import the module:
+
+      import Money
+
+  ## Examples
+
+      iex> Money.new("10.00 USD")
+      ~M"10.00 USD"
+
+      iex> ~M"10.00 USD".currency
+      "USD"
+      iex> ~M"10.01 USD".cents
+      1001
+
+      iex> Money.add(~M"10 USD", ~M"20 USD")
+      ~M"30.00 USD"
+
+      iex> Kernel.to_string(~M"-10.50 USD")
+      "-10.50 USD"
+
+      iex> inspect(~M"10 USD")
+      "~M\"10.00 USD\""
+
+      iex> Money.parse("10 USD")
+      {:ok, ~M"10 USD"}
+      iex> Money.parse("10.1 USD")
+      :error
+
+      iex> ~M"10.001 USD"
+      ** (ArgumentError) invalid string: "10.001 USD"
+
+  """
+
   alias KoobaServer.Money
 
   defstruct cents: 0, currency: nil

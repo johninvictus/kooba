@@ -12,7 +12,7 @@ defmodule KoobaServer.Accounts.User do
 
     has_one(:user_details, KoobaServer.Accounts.UserDetail)
     has_one(:loan_limit, KoobaServer.MicroFinance.LoanLimit)
-
+    has_many(:loans, KoobaServer.MicroFinance.LoanTaken)
     timestamps()
   end
 

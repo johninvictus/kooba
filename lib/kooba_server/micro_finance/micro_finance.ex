@@ -389,4 +389,11 @@ defmodule KoobaServer.MicroFinance do
   def change_loan_payment(%LoanPayment{} = loan_payment) do
     LoanPayment.changeset(loan_payment, %{})
   end
+
+
+
+  @doc """
+
+
+  """
 end

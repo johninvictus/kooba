@@ -23,5 +23,7 @@ defmodule KoobaServerWeb.Router do
     get("/user/credentials", CredentialsController, :index)
     # update or create
     post("/user/credentials", CredentialsController, :create)
+
+    get "loan/request", LoanController, :request
   end
 end

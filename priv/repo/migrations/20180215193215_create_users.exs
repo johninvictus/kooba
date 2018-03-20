@@ -2,6 +2,16 @@ defmodule KoobaServer.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do
+
+    # create type
+    execute("""
+    CREATE TYPE moneyz AS (
+    cents integer,
+    currently varchar
+    );
+    """)
+
+
     create table(:users) do
       # will save number with the plus
       add(:phone, :string, null: false)

@@ -3,11 +3,13 @@ defmodule KoobaServer.Repo.Migrations.CreateLoanSettings do
 
   def change do
     create table(:loan_settings) do
-      add :term_measure, :string, null: false
-      add :frequency, :integer, null: false
-      add :term, :integer, null: false
+      add :name, :string, null: false # will be used to identify
+      add :term_measure, :string, null: false #weekly or monthly
+      add :frequency, :integer, null: false # 1, 2, 3 of payment
+      add :term, :integer, null: false # 28 days
       add :interest, :integer, null: false
       add :late_interest, :integer, null: false
+      add :min_amount, :moneyz, null: false
 
       timestamps()
     end

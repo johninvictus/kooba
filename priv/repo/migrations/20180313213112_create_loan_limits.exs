@@ -3,14 +3,6 @@ defmodule KoobaServer.Repo.Migrations.CreateLoanLimits do
 
   def change do
 
-    # create type
-    execute("""
-    CREATE TYPE moneyz AS (
-    cents integer,
-    currently varchar
-    );
-    """)
-
     create table(:loan_limits) do
       add :amount, :moneyz
       add :status, :string, null: false

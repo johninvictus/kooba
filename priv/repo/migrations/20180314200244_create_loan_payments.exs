@@ -5,7 +5,7 @@ defmodule KoobaServer.Repo.Migrations.CreateLoanPayments do
     create table(:loan_payments) do
       add :payment_schedue, :string, null: false
       add :type, :string, null: false
-      add :amount, :string, null: false
+      add :amount, :moneyz, null: false
       add :status, :string, null: false
       add :notified_count, :integer, null: false
 

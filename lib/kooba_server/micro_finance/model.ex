@@ -1,8 +1,8 @@
-defmodule  KoobaServer.MicroFinance.Model do
+defmodule KoobaServer.MicroFinance.Model do
   @moduledoc """
   This is just a short cut for reducing import boiler plate code
   """
-defmacro __using__(_) do
+  defmacro __using__(_) do
     quote do
       use Ecto.Schema
       import Ecto.Changeset
@@ -13,7 +13,9 @@ defmacro __using__(_) do
         Money,
         MicroFinance.LoanLimit,
         Accounts.User,
-        Repo
+        Repo,
+        MicroFinance.LoanSetting,
+        MicroFinance.LoanTaken
       }
     end
   end

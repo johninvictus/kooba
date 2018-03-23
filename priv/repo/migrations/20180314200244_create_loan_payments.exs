@@ -9,11 +9,11 @@ defmodule KoobaServer.Repo.Migrations.CreateLoanPayments do
       add :status, :string, null: false
       add :notified_count, :integer, null: false
 
-      add :loans_taken_id, references(:loans_taken, on_delete: :delete_all)
+      add :loan_taken_id, references(:loan_taken, on_delete: :delete_all)
 
       timestamps()
     end
 
-    create index(:loan_payments, [:loans_taken_id])
+    create index(:loan_payments, [:loan_taken_id])
   end
 end

@@ -25,29 +25,37 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
   @doc false
   def changeset(%LoanPayment{} = loan_payment, attrs) do
     loan_payment
-    |> cast(attrs, [:payment_schedue, :type, :amount_string, :status])
-    |> validate_required([:payment_schedue, :type, :amount_string, :status])
+    |> cast(attrs, [:payment_schedue, :type, :amount_string, :status, :notified_count])
+    |> validate_required([:payment_schedue, :type, :amount_string, :status, :notified_count])
     |> validate_format(:amount_string, ~r/\A\d+\.\d{2}\Z/, message: "money format is invalid")
     |> validate_inclusion(:status, @status_includes)
     |> validate_inclusion(:type, @type_includes)
-    |> assoc_constraint(:loan_taken)
   end
 
-  def build_changeset(%LoanPayment{} = loan_payment, attrs) do
+  def build_changeset(%LoanTaken{} = loans_taken, %LoanPayment{} = loan_payment, attrs) do
     changeset = changeset(loan_payment, attrs)
 
     if changeset.valid? do
       data = changeset |> apply_changes()
       amount = Money.new("#{data.amount_string} " <> "KSH")
-      struct(LoanPayment, Map.put(data, :amount, amount))
+      # struct(LoanPayment, Map.put(data, :amount, amount))
+      %LoanPayment{
+        loan_taken: loans_taken,
+        amount: amount,
+        payment_schedue: data.payment_schedue,
+        status: data.status,
+        type: data.type,
+        notified_count: data.notified_count
+      }
     else
       changeset
     end
   end
 
   def generate_loan_payment(%LoanTaken{} = loans_taken, attrs) do
-    loans_taken
-    |> build_assoc(:loan_payments)
-    |> build_changeset(attrs)
+    # loans_taken
+    # |> build_assoc(:loan_payments)
+    # |> build_changeset(attrs)
+    build_changeset(loans_taken, %LoanPayment{}, attrs)
   end
 end

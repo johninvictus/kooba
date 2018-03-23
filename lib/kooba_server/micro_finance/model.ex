@@ -15,7 +15,8 @@ defmodule KoobaServer.MicroFinance.Model do
         Accounts.User,
         Repo,
         MicroFinance.LoanSetting,
-        MicroFinance.LoanTaken
+        MicroFinance.LoanTaken,
+        MicroFinance.LoanPayment
       }
     end
   end

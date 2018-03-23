@@ -4,13 +4,14 @@ defmodule KoobaServer.MicroFinance.LoanTaken do
   alias KoobaServer.MicroFinance.LoanTaken
   alias KoobaServer.Money
 
-  schema "loans_taken" do
+  schema "loan_taken" do
     field(:late_fee, Money.Ecto)
     field(:loan_amount, Money.Ecto)
     field(:loan_interest, Money.Ecto)
     field(:loan_total, Money.Ecto)
     field(:next_payment_id, :integer)
     field(:notified_count, :integer)
+    # close, active, pending
     field(:status, :string)
 
     belongs_to(:user, KoobaServer.Accounts.User)

@@ -1,4 +1,5 @@
 defmodule KoobaServer.MicroFinance.RequestLoan do
+  alias KoobaServer.MicroFinance
   use KoobaServer.MicroFinance.Model
   use Timex
 
@@ -71,7 +72,12 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
               |> KoobaServer.Repo.insert!()
             end)
 
-            {:ok, %{loan_taken | loan_payments: payments}}
+            {:ok, payments}
+          end)
+          |> Ecto.Multi.run(:update, fn %{loan_payments: loan_payments, loan_taken: loan_taken} ->
+            first = List.first(loan_payments)
+            next_payment_id = first.id
+            MicroFinance.update_loan_taken(loan_taken, %{next_payment_id: next_payment_id})
           end)
 
         case Repo.transaction(multi) do

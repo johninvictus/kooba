@@ -229,6 +229,23 @@ defmodule KoobaServer.MicroFinance do
   """
   def get_loan_taken!(id), do: Repo.get!(LoanTaken, id)
 
+  def user_has_loan?(user_id) do
+    query =
+      from(
+        c in LoanTaken,
+        where: (c.user_id == ^user_id and c.status == "active") or c.status == "pending"
+      )
+
+    Repo.one(query)
+    |> case do
+      nil ->
+        false
+
+      _ ->
+        true
+    end
+  end
+
   @doc """
   Creates a loan_taken.
 
@@ -389,11 +406,4 @@ defmodule KoobaServer.MicroFinance do
   def change_loan_payment(%LoanPayment{} = loan_payment) do
     LoanPayment.changeset(loan_payment, %{})
   end
-
-
-
-  @doc """
-
-
-  """
 end

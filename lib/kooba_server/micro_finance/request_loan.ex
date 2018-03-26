@@ -1,21 +1,68 @@
 defmodule KoobaServer.MicroFinance.RequestLoan do
   alias KoobaServer.MicroFinance
+  alias KoobaServer.Accounts.User
   use KoobaServer.MicroFinance.Model
   use Timex
 
+  require Logger
+
   embedded_schema do
     field(:payment_period_id, :integer)
+    field(:amount_string, :string)
     field(:amount, :integer)
 
-    field(:amount_string, :string)
+    field(:error, :string)
+    embeds_one(:user, User)
   end
 
-  def changeset(struct, params \\ Map.new()) do
+  def changeset(user, struct, params \\ Map.new()) do
     struct
     |> cast(params, [:payment_period_id, :amount_string])
     |> validate_required([:payment_period_id, :amount_string])
     |> validate_format(:amount_string, ~r/\A\d+\.\d{2}\Z/, message: "is invalid")
     |> put_amount_int()
+    |> put_embed(:user, Repo.preload(user, :loan_limit))
+    |> validate_user_with_limit()
+    |> validate_no_loan_taken()
+  end
+
+  defp validate_no_loan_taken(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        data = apply_changes(changeset)
+        user_id = data.user.id
+
+        if MicroFinance.user_has_loan?(user_id) do
+          add_error(changeset, :error, "You have a pending loan")
+        else
+          changeset
+        end
+
+      %Ecto.Changeset{valid?: false} ->
+        changeset
+    end
+  end
+
+  defp validate_user_with_limit(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        data = apply_changes(changeset)
+        user = data.user
+        amount = Money.new("#{data.amount_string} KSH")
+
+        with :ok <- check_within_limit(user, amount) do
+          changeset
+        else
+          {:error, :limit_exceeded} ->
+            add_error(changeset, :amount_string, "loan limit exceeded")
+
+          {:error, :less_than_100} ->
+            add_error(changeset, :amount_string, "Should be more than 100")
+        end
+
+      %Ecto.Changeset{valid?: false} ->
+        changeset
+    end
   end
 
   defp put_amount_int(changeset) do
@@ -29,68 +76,66 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
   end
 
   def request(%User{} = user, params) do
-    changeset = changeset(%RequestLoan{}, params)
+    changeset = changeset(user, %RequestLoan{}, params)
 
     if changeset.valid? do
       data = apply_changes(changeset)
       # //TODO: find the best way to change currency
       amount = Money.new("#{data.amount_string} KSH")
       # check if the amount is within the loan limit
-      with :ok <- check_within_limit(user, amount) do
-        setting = Repo.get!(LoanSetting, data.payment_period_id)
 
-        interest = (data.amount * (setting.interest / 100)) |> trunc()
-        total_loan = interest + data.amount
-        # use ecto multi to avoid errors
-        loan_taken = %LoanTaken{
-          late_fee: convert_to_money(0),
-          loan_amount: amount,
-          loan_interest: convert_to_money(interest),
-          loan_total: convert_to_money(total_loan),
-          next_payment_id: 0,
-          notified_count: 0,
-          status: "pending",
-          user: user,
-          loan_setting: setting
-        }
+      setting = Repo.get!(LoanSetting, data.payment_period_id)
 
-        # wrap in Ecto.Multi to allow rollback
-        multi =
-          Ecto.Multi.new()
-          |> Ecto.Multi.insert(:loan_taken, loan_taken)
-          |> Ecto.Multi.run(:loan_payments, fn %{loan_taken: loan_taken} ->
-            list_map =
-              generate_payments_list(loan_taken)
-              |> Enum.map(fn param -> generate_payment_struct(param) end)
-              |> Enum.reverse()
+      interest = (data.amount * (setting.interest / 100)) |> trunc()
+      total_loan = interest + data.amount
+      # use ecto multi to avoid errors
+      loan_taken = %LoanTaken{
+        late_fee: convert_to_money(0),
+        loan_amount: amount,
+        loan_interest: convert_to_money(interest),
+        loan_total: convert_to_money(total_loan),
+        next_payment_id: 0,
+        notified_count: 0,
+        status: "pending",
+        user: user,
+        loan_setting: setting
+      }
 
-            # Enum.map(list_map, fn trans -> KoobaServer.Repo.insert!(trans) end)
-            # KoobaServer.Repo.insert_all(LoanPayment, list_map)
+      # wrap in Ecto.Multi to allow rollback
+      multi =
+        Ecto.Multi.new()
+        |> Ecto.Multi.insert(:loan_taken, loan_taken)
+        |> Ecto.Multi.run(:loan_payments, fn %{loan_taken: loan_taken} ->
+          list_map =
+            generate_payments_list(loan_taken)
+            |> Enum.map(fn param -> generate_payment_struct(param) end)
+            |> Enum.reverse()
 
-             payments = Enum.map(list_map, fn transaction ->
+          # Enum.map(list_map, fn trans -> KoobaServer.Repo.insert!(trans) end)
+          # KoobaServer.Repo.insert_all(LoanPayment, list_map)
+
+          payments =
+            Enum.map(list_map, fn transaction ->
               LoanPayment.generate_loan_payment(loan_taken, transaction)
               |> KoobaServer.Repo.insert!()
             end)
 
-            {:ok, payments}
-          end)
-          |> Ecto.Multi.run(:update, fn %{loan_payments: loan_payments, loan_taken: loan_taken} ->
-            first = List.first(loan_payments)
-            next_payment_id = first.id
-            MicroFinance.update_loan_taken(loan_taken, %{next_payment_id: next_payment_id})
-          end)
+          {:ok, payments}
+        end)
+        |> Ecto.Multi.run(:update, fn %{loan_payments: loan_payments, loan_taken: loan_taken} ->
+          first = List.first(loan_payments)
+          next_payment_id = first.id
 
-        case Repo.transaction(multi) do
-          {:ok, result} ->
-            result
+          # // TODO: calculate interest from the loan taken entries and update the loan taken interest amount
+          MicroFinance.update_loan_taken(loan_taken, %{next_payment_id: next_payment_id})
+        end)
 
-          error ->
-            error
-        end
-      else
-        {:error, :limit_exceeded} ->
-          add_error(changeset, :amount, "loan limit exceeded")
-          {:error, changeset}
+      case Repo.transaction(multi) do
+        {:ok, result} ->
+          result
+
+        error ->
+          error
       end
     else
       {:error, changeset}
@@ -156,13 +201,15 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
   end
 
   defp check_within_limit(%User{} = user, %Money{} = amount) do
-    limit = user |> Repo.preload(:loan_limit)
-
     %KoobaServer.MicroFinance.LoanLimit{amount: %KoobaServer.Money{cents: cents}} =
-      limit.loan_limit
+      user.loan_limit
 
     if(amount.cents <= cents) do
-      :ok
+      if amount.cents < 10000 do
+        {:error, :less_than_100}
+      else
+        :ok
+      end
     else
       {:error, :limit_exceeded}
     end

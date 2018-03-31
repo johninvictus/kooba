@@ -21,19 +21,20 @@ defmodule KoobaServer.MicroFinance.PayLoan do
           # update data and anticipate error
           loan_id = List.first(payments_list).loan_taken_id
 
-          Repo.transaction_with_isolation(
-            fn ->
-              with {:ok, transactions} <- update_transactions(payments_list),
-                   {:ok, _loan_taken} <- MicroFinance.close_loan(loan_id) do
-                transactions
-              else
-                _ ->
-                  # //TODO: maybe push to wallet
-                  Repo.rollback("Error occured, database rollback")
-              end
-            end,
-            level: :serializable
-          )
+          # Repo.transaction_with_isolation(
+          #   fn ->
+          with {:ok, transactions} <- update_transactions(payments_list),
+               {:ok, _loan_taken} <- MicroFinance.close_loan(loan_id) do
+            transactions
+          else
+            _ ->
+              # //TODO: maybe push to wallet
+              Repo.rollback("Error occured, database rollback")
+          end
+
+        # end,
+        # level: :serializable
+        # )
 
         _ ->
           :error
@@ -50,8 +51,11 @@ defmodule KoobaServer.MicroFinance.PayLoan do
       |> Enum.map(fn transaction ->
         loan_payment = MicroFinance.get_loan_payment!(transaction.id)
 
-        LoanPayment.generate_update_changeset(loan_payment, update_struct_amount(transaction))
-        |> Repo.update()
+        {:ok, update} =
+          LoanPayment.generate_update_changeset(loan_payment, update_struct_amount(transaction))
+          |> Repo.update()
+
+        update
       end)
 
     {:ok, list}

@@ -123,11 +123,11 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
           {:ok, payments}
         end)
         |> Ecto.Multi.run(:update, fn %{loan_payments: loan_payments, loan_taken: loan_taken} ->
-          first = List.first(loan_payments)
-          next_payment_id = first.id
-
           # // TODO: calculate interest from the loan taken entries and update the loan taken interest amount
-          MicroFinance.update_loan_taken(loan_taken, %{next_payment_id: next_payment_id})
+          MicroFinance.update_loan_taken(
+            loan_taken,
+            generate_update_map(loan_payments, loan_taken)
+          )
         end)
 
       case Repo.transaction(multi) do
@@ -140,6 +140,26 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     else
       {:error, changeset}
     end
+  end
+
+  defp generate_update_map(loan_payments, loan_taken) do
+    total_money =
+      Enum.reduce(loan_payments, %Money{cents: 0, currency: "KSH"}, fn x, cumm ->
+        Money.add(x.amount, cumm)
+      end)
+
+    first = List.first(loan_payments)
+    next_payment_id = first.id
+
+    total_interest = Money.subtract(total_money, loan_taken.loan_amount)
+
+    %{
+      next_payment_id: next_payment_id,
+      late_fee_string: "0.00",
+      loan_amount_string: Money.no_currency_to_string(loan_taken.loan_amount),
+      loan_interest_string: Money.no_currency_to_string(total_interest),
+      loan_total_string: Money.no_currency_to_string(total_money)
+    }
   end
 
   def generate_payment_struct(param) do

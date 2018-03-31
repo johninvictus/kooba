@@ -75,6 +75,13 @@ defmodule KoobaServer.Money do
     %Money{cents: left_cents + right_cents, currency: currency}
   end
 
+  def subtract(%Money{cents: left_cents, currency: currency}, %Money{
+        cents: right_cents,
+        currency: currency
+      }) do
+          %Money{cents: left_cents - right_cents, currency: currency}
+      end
+
   def to_string(%Money{cents: cents, currency: currency}) when cents >= 0 do
     {dollars, cents} = {div(cents, 100), rem(cents, 100)}
     cents = :io_lib.format("~2..0B", [cents]) |> IO.iodata_to_binary()

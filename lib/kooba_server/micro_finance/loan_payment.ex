@@ -11,7 +11,11 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
 
   schema "loan_payments" do
     field(:amount, Money.Ecto)
+    field :payment_remaining, Money.Ecto
+
     field(:amount_string, :string, virtual: true)
+    field(:payment_remaining_string, :string, virtual: true)
+
     field(:payment_schedue, :string)
     field(:status, :string)
     field(:type, :string)
@@ -25,9 +29,10 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
   @doc false
   def changeset(%LoanPayment{} = loan_payment, attrs) do
     loan_payment
-    |> cast(attrs, [:payment_schedue, :type, :amount_string, :status, :notified_count])
-    |> validate_required([:payment_schedue, :type, :amount_string, :status, :notified_count])
+    |> cast(attrs, [:payment_schedue, :type, :amount_string, :status, :notified_count, :payment_remaining_string])
+    |> validate_required([:payment_schedue, :type, :amount_string, :status, :notified_count, :payment_remaining_string])
     |> validate_format(:amount_string, ~r/\A\d+\.\d{2}\Z/, message: "money format is invalid")
+    |> validate_format(:payment_remaining_string, ~r/\A\d+\.\d{2}\Z/, message: "money format is invalid")
     |> validate_inclusion(:status, @status_includes)
     |> validate_inclusion(:type, @type_includes)
   end
@@ -38,10 +43,12 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
     if changeset.valid? do
       data = changeset |> apply_changes()
       amount = Money.new("#{data.amount_string} " <> "KSH")
+      payment_remaining = Money.new("#{data.payment_remaining_string} " <> "KSH")
       # struct(LoanPayment, Map.put(data, :amount, amount))
       %LoanPayment{
         loan_taken: loans_taken,
         amount: amount,
+        payment_remaining: payment_remaining,
         payment_schedue: data.payment_schedue,
         status: data.status,
         type: data.type,

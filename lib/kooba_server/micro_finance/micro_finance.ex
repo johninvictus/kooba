@@ -7,6 +7,8 @@ defmodule KoobaServer.MicroFinance do
   alias KoobaServer.Repo
 
   alias KoobaServer.MicroFinance.LoanSetting
+  alias KoobaServer.Accounts.User
+  alias KoobaServer.Money
 
   @doc """
   Returns the list of loan_settings.
@@ -246,6 +248,17 @@ defmodule KoobaServer.MicroFinance do
     end
   end
 
+
+  def get_user_open_loan(%User{} = user) do
+    query =
+      from(
+        c in LoanTaken,
+        where: (c.user_id == ^user.id and c.status == "active") or c.status == "pending"
+      )
+      Repo.one(query)
+  end
+
+
   @doc """
   Creates a loan_taken.
 
@@ -406,4 +419,15 @@ defmodule KoobaServer.MicroFinance do
   def change_loan_payment(%LoanPayment{} = loan_payment) do
     LoanPayment.changeset(loan_payment, %{})
   end
+
+  @doc """
+  List loans payments to pay arranged in asc order
+  Loan payments not yet payed
+  """
+  def get_loan_payments(user) do
+  open_loan = user |> get_user_open_loan()
+  q = from c in LoanPayment, where: c.loan_taken_id == ^open_loan.id and c.status == "unpaid" or  c.status == "late"
+  Repo.all(q)
+  end
+
 end

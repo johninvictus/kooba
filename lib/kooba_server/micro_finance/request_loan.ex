@@ -193,6 +193,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
   defp generate_map(current_date, equal_payments) do
     %{
       amount_string: convert_money_to_float_string(equal_payments),
+      payment_remaining_string: convert_money_to_float_string(equal_payments),
       payment_schedue: current_date,
       status: "unpaid",
       type: "normal",

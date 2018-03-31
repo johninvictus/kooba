@@ -7,6 +7,7 @@ defmodule KoobaServer.MicroFinance.Model do
       use Ecto.Schema
       import Ecto.Changeset
       import Ecto.Query
+      import KoobaServer.Money
 
       alias KoobaServer.{
         MicroFinance.RequestLoan,
@@ -16,7 +17,8 @@ defmodule KoobaServer.MicroFinance.Model do
         Repo,
         MicroFinance.LoanSetting,
         MicroFinance.LoanTaken,
-        MicroFinance.LoanPayment
+        MicroFinance.LoanPayment,
+        MicroFinance
       }
     end
   end

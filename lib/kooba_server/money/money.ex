@@ -79,8 +79,8 @@ defmodule KoobaServer.Money do
         cents: right_cents,
         currency: currency
       }) do
-          %Money{cents: left_cents - right_cents, currency: currency}
-      end
+    %Money{cents: left_cents - right_cents, currency: currency}
+  end
 
   def to_string(%Money{cents: cents, currency: currency}) when cents >= 0 do
     {dollars, cents} = {div(cents, 100), rem(cents, 100)}
@@ -90,6 +90,12 @@ defmodule KoobaServer.Money do
 
   def to_string(%Money{cents: cents, currency: currency}) do
     "-" <> Money.to_string(%Money{cents: -cents, currency: currency})
+  end
+
+  def no_currency_to_string(%Money{cents: cents}) when cents >= 0 do
+    {dollars, cents} = {div(cents, 100), rem(cents, 100)}
+    cents = :io_lib.format("~2..0B", [cents]) |> IO.iodata_to_binary()
+    "#{dollars}.#{cents}"
   end
 end
 

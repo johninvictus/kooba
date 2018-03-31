@@ -248,16 +248,15 @@ defmodule KoobaServer.MicroFinance do
     end
   end
 
-
   def get_user_open_loan(%User{} = user) do
     query =
       from(
         c in LoanTaken,
         where: (c.user_id == ^user.id and c.status == "active") or c.status == "pending"
       )
-      Repo.one(query)
-  end
 
+    Repo.one(query)
+  end
 
   @doc """
   Creates a loan_taken.
@@ -425,9 +424,55 @@ defmodule KoobaServer.MicroFinance do
   Loan payments not yet payed
   """
   def get_loan_payments(user) do
-  open_loan = user |> get_user_open_loan()
-  q = from c in LoanPayment, where: c.loan_taken_id == ^open_loan.id and c.status == "unpaid" or  c.status == "late"
-  Repo.all(q)
+    open_loan = user |> get_user_open_loan()
+
+    q =
+      from(
+        c in LoanPayment,
+        where: (c.loan_taken_id == ^open_loan.id and c.status == "unpaid") or c.status == "late"
+      )
+
+    Repo.all(q)
   end
 
+  def get_open_loan(loan_taken_id) do
+    q = from(c in LoanTaken, where: c.id == ^loan_taken_id and c.status == "active")
+    Repo.one(q)
+  end
+
+  def close_loan(loan_taken_id) do
+    case get_open_loan(loan_taken_id) do
+      nil ->
+        {:error, :already_closed}
+
+      loan_open when is_map(loan_open) ->
+        if all_payments_payed?(loan_open.id) do
+          update_loan_taken(loan_open, %{
+            status: "closed",
+            loan_amount_string: Money.no_currency_to_string(loan_open.loan_amount),
+            loan_interest_string: Money.no_currency_to_string(loan_open.loan_interest),
+            late_fee_string: Money.no_currency_to_string(loan_open.late_fee),
+            loan_total_string: Money.no_currency_to_string(loan_open.loan_total)
+          })
+        else
+          {:ok, loan_open}
+        end
+    end
+  end
+
+  def all_payments_payed?(loan_taken_id) do
+    q =
+      from(
+        c in LoanPayment,
+        where: (c.loan_taken_id == ^loan_taken_id and c.status == "unpaid") or c.status == "late"
+      )
+
+    case Repo.all(q) do
+      [] ->
+        true
+
+      _ ->
+        false
+    end
+  end
 end

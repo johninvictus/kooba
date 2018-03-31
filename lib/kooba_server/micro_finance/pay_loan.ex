@@ -19,10 +19,12 @@ defmodule KoobaServer.MicroFinance.PayLoan do
             |> Enum.reverse()
 
           # update data and anticipate error
+          loan_id = List.first(payments_list).loan_taken_id
 
           Repo.transaction_with_isolation(
             fn ->
-              with {:ok, transactions} <- update_transactions(payments_list) do
+              with {:ok, transactions} <- update_transactions(payments_list),
+                   {:ok, _loan_taken} <- MicroFinance.close_loan(loan_id) do
                 transactions
               else
                 _ ->
@@ -46,10 +48,18 @@ defmodule KoobaServer.MicroFinance.PayLoan do
     list =
       payments
       |> Enum.map(fn transaction ->
-        Repo.update(transaction)
+        loan_payment = MicroFinance.get_loan_payment!(transaction.id)
+
+        LoanPayment.generate_update_changeset(loan_payment, update_struct_amount(transaction))
+        |> Repo.update()
       end)
 
     {:ok, list}
+  end
+
+  defp update_struct_amount(transaction) do
+    tran_map = Map.from_struct(transaction)
+    %{tran_map | amount_string: Money.no_currency_to_string(tran_map.amount)}
   end
 
   defp list_loan_payments(loan_payments, amount) do
@@ -71,16 +81,20 @@ defmodule KoobaServer.MicroFinance.PayLoan do
       remaining_cash = Money.subtract(amount, payment.payment_remaining)
       update_status = %{payment | status: "paid"}
 
-      {Map.put(update_status, :payment_remaining, %Money{cents: 0, currency: "KSH"}),
-       remaining_cash}
+      {Map.put(
+         update_status,
+         :payment_remaining_string,
+         Money.no_currency_to_string(%Money{cents: 0, currency: "KSH"})
+       ), remaining_cash}
     else
       # payment is higher
       payment_remainder = Money.subtract(payment.payment_remaining, amount)
 
-      {Map.put(payment, :payment_remaining, payment_remainder), %Money{cents: 0, currency: "KSH"}}
+      {Map.put(
+         payment,
+         :payment_remaining_string,
+         Money.no_currency_to_string(payment_remainder)
+       ), %Money{cents: 0, currency: "KSH"}}
     end
-  end
-
-  defp close_maybe_loan do
   end
 end

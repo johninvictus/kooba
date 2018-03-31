@@ -11,7 +11,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
 
   schema "loan_payments" do
     field(:amount, Money.Ecto)
-    field :payment_remaining, Money.Ecto
+    field(:payment_remaining, Money.Ecto)
 
     field(:amount_string, :string, virtual: true)
     field(:payment_remaining_string, :string, virtual: true)
@@ -29,40 +29,96 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
   @doc false
   def changeset(%LoanPayment{} = loan_payment, attrs) do
     loan_payment
-    |> cast(attrs, [:payment_schedue, :type, :amount_string, :status, :notified_count, :payment_remaining_string])
-    |> validate_required([:payment_schedue, :type, :amount_string, :status, :notified_count, :payment_remaining_string])
+    |> cast(attrs, [
+      :payment_schedue,
+      :type,
+      :amount_string,
+      :status,
+      :notified_count,
+      :payment_remaining_string
+    ])
+    |> validate_required([
+      :payment_schedue,
+      :type,
+      :amount_string,
+      :status,
+      :notified_count,
+      :payment_remaining_string
+    ])
     |> validate_format(:amount_string, ~r/\A\d+\.\d{2}\Z/, message: "money format is invalid")
-    |> validate_format(:payment_remaining_string, ~r/\A\d+\.\d{2}\Z/, message: "money format is invalid")
+    |> put_amount()
+    |> validate_format(
+      :payment_remaining_string,
+      ~r/\A\d+\.\d{2}\Z/,
+      message: "money format is invalid"
+    )
+    |> put_payment_remaining()
     |> validate_inclusion(:status, @status_includes)
     |> validate_inclusion(:type, @type_includes)
   end
 
-  def build_changeset(%LoanTaken{} = loans_taken, %LoanPayment{} = loan_payment, attrs) do
-    changeset = changeset(loan_payment, attrs)
+  defp put_amount(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        data = changeset |> apply_changes()
+        amount = Money.new("#{data.amount_string} " <> "KSH")
 
-    if changeset.valid? do
-      data = changeset |> apply_changes()
-      amount = Money.new("#{data.amount_string} " <> "KSH")
-      payment_remaining = Money.new("#{data.payment_remaining_string} " <> "KSH")
-      # struct(LoanPayment, Map.put(data, :amount, amount))
-      %LoanPayment{
-        loan_taken: loans_taken,
-        amount: amount,
-        payment_remaining: payment_remaining,
-        payment_schedue: data.payment_schedue,
-        status: data.status,
-        type: data.type,
-        notified_count: data.notified_count
-      }
-    else
-      changeset
+        put_change(changeset, :amount, amount)
+
+      %Ecto.Changeset{valid?: false} ->
+        changeset
+    end
+  end
+
+  defp put_payment_remaining(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        data = changeset |> apply_changes()
+        payment_remaining = Money.new("#{data.payment_remaining_string} " <> "KSH")
+        put_change(changeset, :payment_remaining, payment_remaining)
+
+      %Ecto.Changeset{valid?: false} ->
+        changeset
     end
   end
 
   def generate_loan_payment(%LoanTaken{} = loans_taken, attrs) do
-    # loans_taken
-    # |> build_assoc(:loan_payments)
-    # |> build_changeset(attrs)
-    build_changeset(loans_taken, %LoanPayment{}, attrs)
+    loans_taken
+    |> build_assoc(:loan_payments)
+    |> changeset(attrs)
+  end
+
+  def generate_update_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [
+      :payment_schedue,
+      :type,
+      :amount_string,
+      :status,
+      :notified_count,
+      :payment_remaining_string,
+      :id,
+      :loan_taken_id
+    ])
+    |> validate_required([
+      :payment_schedue,
+      :type,
+      :amount_string,
+      :status,
+      :notified_count,
+      :payment_remaining_string,
+      :id,
+      :loan_taken_id
+    ])
+    |> validate_format(:amount_string, ~r/\A\d+\.\d{2}\Z/, message: "money format is invalid")
+    |> put_amount()
+    |> validate_format(
+      :payment_remaining_string,
+      ~r/\A\d+\.\d{2}\Z/,
+      message: "money format is invalid"
+    )
+    |> put_payment_remaining()
+    |> validate_inclusion(:status, @status_includes)
+    |> validate_inclusion(:type, @type_includes)
   end
 end

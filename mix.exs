@@ -43,7 +43,8 @@ defmodule KoobaServer.Mixfile do
       {:poison, "~> 3.1"},
       {:guardian, "~> 1.0"},
       {:cors_plug, "~> 1.5"},
-      {:timex, "~> 3.1"}
+      {:timex, "~> 3.1"},
+      {:quantum, "~> 2.2"}
     ]
   end
 

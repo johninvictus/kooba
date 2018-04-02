@@ -20,7 +20,7 @@ defmodule KoobaServer.Mixfile do
   def application do
     [
       mod: {KoobaServer.Application, []},
-      extra_applications: [:logger, :runtime_tools, :httpoison, :timex, :exq]
+      extra_applications: [:logger, :runtime_tools, :httpoison, :timex, :exq, :exq_ui]
     ]
   end
 
@@ -45,7 +45,8 @@ defmodule KoobaServer.Mixfile do
       {:cors_plug, "~> 1.5"},
       {:timex, "~> 3.1"},
       {:quantum, "~> 2.2"},
-      {:exq, "~> 0.10.1"}
+      {:exq, "~> 0.10.1"},
+      {:exq_ui, "~> 0.9.0"}
     ]
   end
 

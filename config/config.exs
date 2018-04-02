@@ -24,20 +24,21 @@ config :kooba_server, :facebook_account_kit,
   app_secret: "e2bb65762d42386629bb47838c7a2ded",
   facebook_app_id: "588042518246985"
 
-
-  # scheduler
-  config :kooba_server, KoobaServer.Schedulers,
+# scheduler
+config :kooba_server, KoobaServer.Schedulers,
   jobs: [
-     {"* * * * *", {KoobaServer.Schedulers, :send, []}}
+    {"* * * * *", {KoobaServer.Schedulers, :send, []}}
   ]
 
-  config :exq,
+config :exq,
   name: Exq,
   host: "127.0.0.1",
   port: 6379,
   namespace: "exq",
   concurrency: 500,
   queues: ["notification"]
+
+config :exq_ui, server: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

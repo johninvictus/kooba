@@ -1,8 +1,9 @@
 defmodule KoobaServer.Schedulers do
-  use Quantum.Scheduler, otp_app: :kooba_server
+  use Quantum.Scheduler,
+   otp_app: :kooba_server
 
   def send do
-    IO.puts "logger mate"
+   Exq.enqueue(Exq, "notification", KoobaServer.Queue.Notification, ["John"])
   end
 
 end

@@ -46,7 +46,9 @@ defmodule KoobaServer.Mixfile do
       {:timex, "~> 3.1"},
       {:quantum, "~> 2.2"},
       {:exq, "~> 0.10.1"},
-      {:exq_ui, "~> 0.9.0"}
+      {:exq_ui, "~> 0.9.0"},
+      {:httpotion, "~> 3.1.0"},
+      {:elixir_xml_to_map, "~> 0.1"}
     ]
   end
 

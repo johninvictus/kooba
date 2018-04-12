@@ -43,6 +43,13 @@ defmodule KoobaServerWeb.Router do
     get("loan/request", LoanController, :request)
   end
 
+  scope "/mpesa", KoobaServerWeb do
+    pipe_through(:api)
+
+    post("/callbacks/confirmation", MpesaController, :confirmation)
+    post("/callbacks/validation", MpesaController, :validation)
+  end
+
   scope "/exq", ExqUi do
     pipe_through(:exq)
     forward("/", RouterPlug.Router, :index)

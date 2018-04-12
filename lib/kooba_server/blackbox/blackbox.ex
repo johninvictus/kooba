@@ -1,4 +1,4 @@
-defmodule BlackBox do
+defmodule KoobaServer.BlackBox do
   @base_url "http://blackbox.co.ke/vas/index.php/api"
 
   @type response ::

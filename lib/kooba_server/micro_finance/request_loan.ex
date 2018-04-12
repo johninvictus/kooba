@@ -163,8 +163,8 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
   end
 
   def generate_payment_struct(param) do
-    {:ok, date_string} = param.payment_schedue |> Timex.format("%Y-%m-%d", :strftime)
-    %{param | payment_schedue: date_string}
+    {:ok, date_string} = param.payment_schedue_string |> Timex.format("%Y-%m-%d", :strftime)
+    %{param | payment_schedue_string: date_string}
     # Map.put(param, :loans_taken_id, loan_taken.id)
   end
 
@@ -214,7 +214,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     %{
       amount_string: convert_money_to_float_string(equal_payments),
       payment_remaining_string: convert_money_to_float_string(equal_payments),
-      payment_schedue: current_date,
+      payment_schedue_string: current_date,
       status: "unpaid",
       type: "normal",
       notified_count: 0

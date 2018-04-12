@@ -27,7 +27,7 @@ config :kooba_server, :facebook_account_kit,
 # scheduler
 config :kooba_server, KoobaServer.Schedulers,
   jobs: [
-    {"* * * * *", {KoobaServer.Schedulers, :send, []}}
+    # {"* * * * *", {KoobaServer.Schedulers, :send, []}}
   ]
 
 config :exq,

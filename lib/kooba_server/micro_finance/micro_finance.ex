@@ -9,6 +9,7 @@ defmodule KoobaServer.MicroFinance do
   alias KoobaServer.MicroFinance.LoanSetting
   alias KoobaServer.Accounts.User
   alias KoobaServer.Money
+  use Timex
 
   @doc """
   Returns the list of loan_settings.
@@ -232,8 +233,7 @@ defmodule KoobaServer.MicroFinance do
   def get_loan_taken!(id), do: Repo.get!(LoanTaken, id)
 
   def user_has_loan?(user_id) do
-    query =
-      from(c in LoanTaken, where: (c.user_id == ^user_id and c.status == "active"))
+    query = from(c in LoanTaken, where: c.user_id == ^user_id and c.status == "active")
 
     Repo.one(query)
     |> case do
@@ -472,4 +472,41 @@ defmodule KoobaServer.MicroFinance do
         false
     end
   end
+
+  @doc """
+  This will get all loans that are due 1day, 0day,  +1 day and are not payed yet.
+
+  """
+  def get_loans_to_notify do
+    q =
+      from(
+        c in LoanTaken,
+        join: p in LoanPayment,
+        on: p.id == c.next_payment_id,
+        where:
+          fragment(
+            "now() - ? >= interval '-1 days' and now() - ? <= interval '1 days'",
+            p.inserted_at,
+            p.inserted_at
+          )
+      )
+
+    Repo.all(q)
+  end
+
+  @doc """
+  Take date and return difference
+  """
+  def date_difference(date_string) do
+    duration =
+      date_string
+      |> Timex.parse!("%Y-%m-%d", :strftime)
+      |> Timex.to_datetime()
+      |> DateTime.to_unix(:milliseconds)
+      |> Timex.Duration.from_microseconds()
+
+    Duration.diff(duration, Duration.zero(), :days)
+  end
+
+  # flag loans that are not pay after 2day to late and then move to the next payment
 end

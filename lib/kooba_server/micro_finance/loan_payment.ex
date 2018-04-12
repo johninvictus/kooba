@@ -16,7 +16,8 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
     field(:amount_string, :string, virtual: true)
     field(:payment_remaining_string, :string, virtual: true)
 
-    field(:payment_schedue, :string)
+    field(:payment_schedue_string, :string, virtual: true)
+    field(:payment_schedue, :naive_datetime)
     field(:status, :string)
     field(:type, :string)
     field(:notified_count, :integer)
@@ -30,7 +31,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
   def changeset(%LoanPayment{} = loan_payment, attrs) do
     loan_payment
     |> cast(attrs, [
-      :payment_schedue,
+      :payment_schedue_string,
       :type,
       :amount_string,
       :status,
@@ -38,7 +39,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
       :payment_remaining_string
     ])
     |> validate_required([
-      :payment_schedue,
+      :payment_schedue_string,
       :type,
       :amount_string,
       :status,
@@ -55,6 +56,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
     |> put_payment_remaining()
     |> validate_inclusion(:status, @status_includes)
     |> validate_inclusion(:type, @type_includes)
+    |> put_naive_date()
   end
 
   defp put_amount(changeset) do
@@ -82,6 +84,18 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
     end
   end
 
+  def put_naive_date(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        data = changeset |> apply_changes()
+        naive_date = NaiveDateTime.from_iso8601!("#{data.payment_schedue_string} 00:00:00")
+        put_change(changeset, :payment_schedue, naive_date)
+
+      %Ecto.Changeset{valid?: false} ->
+        changeset
+    end
+  end
+
   def generate_loan_payment(%LoanTaken{} = loans_taken, attrs) do
     loans_taken
     |> build_assoc(:loan_payments)
@@ -91,7 +105,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
   def generate_update_changeset(struct, attrs) do
     struct
     |> cast(attrs, [
-      :payment_schedue,
+      :payment_schedue_string,
       :type,
       :amount_string,
       :status,
@@ -101,7 +115,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
       :loan_taken_id
     ])
     |> validate_required([
-      :payment_schedue,
+      :payment_schedue_string,
       :type,
       :amount_string,
       :status,

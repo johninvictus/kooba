@@ -1,4 +1,6 @@
-defmodule BlackBox.Message do
+defmodule KoobaServer.BlackBox.Message do
+  alias KoobaServer.BlackBox
+
   @type response :: {:ok, map, HTTPotion.Response.t()} | {integer, any, HTTPotion.Response.t()}
 
   def new(recipient, message, sender, keyword, scheduled_date \\ "") do

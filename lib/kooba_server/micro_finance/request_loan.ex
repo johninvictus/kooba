@@ -108,7 +108,6 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
         |> Ecto.Multi.run(:loan_payments, fn %{loan_taken: loan_taken} ->
           list_map =
             generate_payments_list(loan_taken)
-            |> Enum.map(fn param -> generate_payment_struct(param) end)
             |> Enum.reverse()
 
           # Enum.map(list_map, fn trans -> KoobaServer.Repo.insert!(trans) end)
@@ -162,11 +161,10 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     }
   end
 
-  def generate_payment_struct(param) do
-    {:ok, date_string} = param.payment_schedue_string |> Timex.format("%Y-%m-%d", :strftime)
-    %{param | payment_schedue_string: date_string}
-    # Map.put(param, :loans_taken_id, loan_taken.id)
-  end
+  # def generate_payment_struct(param) do
+  #   {:ok, date_string} = param.payment_schedue_string |> Timex.format("%Y-%m-%d", :strftime)
+  #   %{param | payment_schedue_string: date_string}
+  # end
 
   def generate_payments_list(%LoanTaken{} = loan_taken) do
     loan_settings = loan_taken.loan_setting
@@ -197,7 +195,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
   end
 
   def generate_payments(%Money{} = equal_payments, factor, offset_days) do
-    generate(equal_payments, factor, offset_days, Timex.today(), [])
+    generate(equal_payments, factor, offset_days, Timex.local(), [])
   end
 
   def generate(_equal_payments, 0, _offset_days, _curent_date, list), do: list
@@ -214,7 +212,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     %{
       amount_string: convert_money_to_float_string(equal_payments),
       payment_remaining_string: convert_money_to_float_string(equal_payments),
-      payment_schedue_string: current_date,
+      payment_schedue_string: NaiveDateTime.to_iso8601(current_date),
       status: "unpaid",
       type: "normal",
       notified_count: 0

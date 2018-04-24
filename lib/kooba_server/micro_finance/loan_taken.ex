@@ -17,7 +17,7 @@ defmodule KoobaServer.MicroFinance.LoanTaken do
 
     field(:next_payment_id, :integer)
     field(:notified_count, :integer)
-    # closed, active, pending
+    # closed, active, pending, late
     field(:status, :string)
 
     belongs_to(:user, KoobaServer.Accounts.User)

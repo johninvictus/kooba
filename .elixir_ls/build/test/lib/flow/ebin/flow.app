@@ -1,0 +1,12 @@
+{application,flow,
+             [{description,"Computational parallel flows for Elixir"},
+              {modules,['Elixir.Enumerable.Flow','Elixir.Flow',
+                        'Elixir.Flow.Coordinator','Elixir.Flow.MapReducer',
+                        'Elixir.Flow.Materialize','Elixir.Flow.Window',
+                        'Elixir.Flow.Window.Count','Elixir.Flow.Window.Fixed',
+                        'Elixir.Flow.Window.Global',
+                        'Elixir.Flow.Window.Periodic',
+                        'Elixir.Flow.Window.Session']},
+              {registered,[]},
+              {vsn,"0.13.0"},
+              {applications,[kernel,stdlib,elixir,logger,gen_stage]}]}.

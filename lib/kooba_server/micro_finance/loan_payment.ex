@@ -88,7 +88,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         data = changeset |> apply_changes()
-        naive_date = NaiveDateTime.from_iso8601!("#{data.payment_schedue_string} 00:00:00")
+        naive_date = NaiveDateTime.from_iso8601!(data.payment_schedue_string)
         put_change(changeset, :payment_schedue, naive_date)
 
       %Ecto.Changeset{valid?: false} ->

@@ -48,7 +48,8 @@ defmodule KoobaServer.Mixfile do
       {:exq, "~> 0.10.1"},
       {:exq_ui, "~> 0.9.0"},
       {:httpotion, "~> 3.1.0"},
-      {:elixir_xml_to_map, "~> 0.1"}
+      {:elixir_xml_to_map, "~> 0.1"},
+      {:fcmex, "~> 0.1.2"}
     ]
   end
 

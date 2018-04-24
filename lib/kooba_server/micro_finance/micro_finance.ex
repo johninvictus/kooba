@@ -475,9 +475,11 @@ defmodule KoobaServer.MicroFinance do
 
   @doc """
   This will get all loans that are due 1day, 0day,  +1 day and are not payed yet.
-
   """
-  def get_loans_to_notify do
+
+  def notify_user_witth_loans do
+    # If test does not pass use filter method to validate date to notify
+    # Enum.filter(query, fn p -> date_difference(p.payment_schedule) == 2 end)
     q =
       from(
         c in LoanTaken,
@@ -485,13 +487,23 @@ defmodule KoobaServer.MicroFinance do
         on: p.id == c.next_payment_id,
         where:
           fragment(
-            "now() - ? >= interval '-1 days' and now() - ? <= interval '1 days'",
-            p.inserted_at,
-            p.inserted_at
+            "now() - ? >= interval '-2 days' and now() - ? <= interval '2 days'",
+            p.payment_schedue,
+            p.payment_schedue
           )
       )
 
-    Repo.all(q)
+    # pick only the active loans
+    q = from([c, p] in q, where: c.status == "pending" and c.notified_count < 3, select: {c, p})
+
+    # list of loans
+    user_payments = q |> Repo.all()
+  end
+
+  @doc """
+    move loan to the next payment date
+  """
+  def next_loan_payment do
   end
 
   @doc """

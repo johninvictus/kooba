@@ -45,6 +45,9 @@ config :kooba_server,
   api_signature:
     "v5YaFS7QlSVrqsBA9+x5nAI4J7UkJ6SDbn0MPhup890ewv0EAwh0R9JPjvS8mQ+WYV57rAKNzJ5mkd37y54sEkfTqoxjP+oovjzYZW52kzycqE0OYyGsSetTUoo9wolmqP7ttVP1j63w/oXHa85B/2ee2icGDIv+GrTrW7d4qXA="
 
+
+    config :fcmex,
+      server_key: "AIzaSyCu_A3SgMXa1ABaErwj9665rPpbeaMlrHs"
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

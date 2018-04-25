@@ -37,6 +37,12 @@ defmodule KoobaServerWeb.Router do
 
     resources("/users", UserController, except: [:new, :edit])
     get("/user/credentials", CredentialsController, :index)
+
+    # post the device id, get user devices,
+    # post and get are working
+    # TODO: complete :update, :show, :delete
+    resources("user/device", DeviceController, except: [:new, :edit])
+
     # update or create
     post("/user/credentials", CredentialsController, :create)
 

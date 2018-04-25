@@ -11,8 +11,10 @@ defmodule KoobaServer.Accounts.User do
     field(:national_number, :integer)
 
     has_one(:user_details, KoobaServer.Accounts.UserDetail)
+    has_one(:device, KoobaServer.DeviceManager.Device)
     has_one(:loan_limit, KoobaServer.MicroFinance.LoanLimit)
     has_many(:loans, KoobaServer.MicroFinance.LoanTaken)
+
     timestamps()
   end
 
@@ -24,7 +26,7 @@ defmodule KoobaServer.Accounts.User do
     |> unique_constraint(:phone)
   end
 
-  def build(attrs \\ Map.new) do
+  def build(attrs \\ Map.new()) do
     changeset(%User{}, attrs)
     |> put_assoc(:loan_limit, LoanLimit.build_initial_limit())
   end

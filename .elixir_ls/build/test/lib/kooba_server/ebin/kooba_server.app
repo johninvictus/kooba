@@ -52,6 +52,8 @@
                         'Elixir.KoobaServerWeb.ErrorView',
                         'Elixir.KoobaServerWeb.FallbackController',
                         'Elixir.KoobaServerWeb.Gettext',
+                        'Elixir.KoobaServerWeb.KoobaController',
+                        'Elixir.KoobaServerWeb.KoobaView',
                         'Elixir.KoobaServerWeb.LoanController',
                         'Elixir.KoobaServerWeb.MpesaController',
                         'Elixir.KoobaServerWeb.MpesaView',

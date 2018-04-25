@@ -5,8 +5,8 @@ defmodule KoobaServerWeb.LoanController do
   Expand the actions to contain the user
   """
   def action(conn, _params) do
-    resource = Guardian.Plug.current_claims(conn)
-    apply( __MODULE__, action_name(conn), [conn, conn.params, resource])
+    resource = Guardian.Plug.current_resource(conn)
+    apply(__MODULE__, action_name(conn), [conn, conn.params, resource])
   end
 
   @doc """
@@ -18,6 +18,5 @@ defmodule KoobaServerWeb.LoanController do
    params laon amount and loan setting id
   """
   def request(conn, params, user) do
-    
   end
 end

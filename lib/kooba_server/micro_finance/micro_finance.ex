@@ -137,6 +137,15 @@ defmodule KoobaServer.MicroFinance do
   def get_loan_limit!(id), do: Repo.get!(LoanLimit, id)
 
   @doc """
+  get user loan limit
+  """
+
+  def get_user_loan_limit(%User{} = user) do
+    user = user |> Repo.preload(:loan_limit)
+    user.loan_limit
+  end
+
+  @doc """
   Creates a loan_limit.
 
   ## Examples

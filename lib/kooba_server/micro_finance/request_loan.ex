@@ -131,7 +131,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
 
       case Repo.transaction(multi) do
         {:ok, result} ->
-          result
+          {:ok, result}
 
         error ->
           error
@@ -170,11 +170,11 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     loan_settings = loan_taken.loan_setting
 
     length =
-      cond do
-        loan_settings.term_measure && "weekly" ->
+      case loan_settings.term_measure do
+        "weekly" ->
           7
 
-        loan_settings.term_measure && "monthly" ->
+        "monthly" ->
           28
       end
 
@@ -182,6 +182,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     # how many times to divide
     # // TODO: make sure it does not return float number
     factor = (loan_settings.term / (length * loan_settings.frequency)) |> trunc()
+
     # add 1 to remove the round of error
     equal_payments =
       (convert_money_to_integer(loan_taken.loan_total) / factor + 1)

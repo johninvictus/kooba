@@ -46,10 +46,13 @@ defmodule KoobaServerWeb.Router do
     # update or create
     post("/user/credentials", CredentialsController, :create)
 
-    get("loan/request", LoanController, :request)
+    post("loan/request", LoanController, :request)
 
     # show loan state, limit, loans settings, purnishment
     get("kooba/state", KoobaController, :state)
+
+    # show loans taken and payment
+    get("kooba/loan", KoobaController, :loan)
   end
 
   scope "/mpesa", KoobaServerWeb do

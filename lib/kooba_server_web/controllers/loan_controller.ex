@@ -1,6 +1,10 @@
 defmodule KoobaServerWeb.LoanController do
   use KoobaServerWeb, :controller
 
+  alias KoobaServer.MicroFinance.RequestLoan
+
+  action_fallback(KoobaServerWeb.FallbackController)
+
   @doc """
   Expand the actions to contain the user
   """
@@ -18,5 +22,19 @@ defmodule KoobaServerWeb.LoanController do
    params laon amount and loan setting id
   """
   def request(conn, params, user) do
+    case RequestLoan.request(user, params) do
+        {:ok, _result} ->
+          conn
+          |> put_status(:ok)
+          |> render("request.json", %{message: "Loan successifully taken"})
+
+        {:error, changeset} ->
+          {:error, changeset}
+
+        _ ->
+        conn
+        |> put_status(:internal_server_error)
+        |> render(KoobaServerWeb.ErrorView, "error.json", %{message: "An error occured while submiting your loan request, please try again"})
+    end
   end
 end

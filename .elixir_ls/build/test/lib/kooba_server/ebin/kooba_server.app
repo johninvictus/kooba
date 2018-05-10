@@ -55,6 +55,7 @@
                         'Elixir.KoobaServerWeb.KoobaController',
                         'Elixir.KoobaServerWeb.KoobaView',
                         'Elixir.KoobaServerWeb.LoanController',
+                        'Elixir.KoobaServerWeb.LoanView',
                         'Elixir.KoobaServerWeb.MpesaController',
                         'Elixir.KoobaServerWeb.MpesaView',
                         'Elixir.KoobaServerWeb.Router',

@@ -28,4 +28,21 @@ defmodule KoobaServerWeb.KoobaController do
       has_loan: has_loan
     })
   end
+
+  def loan(conn, _params, user) do
+    cond do
+      MicroFinance.user_has_loan?(user.id) ->
+        loan_taken = MicroFinance.get_user_open_loan(user)
+        loan_payments = MicroFinance.get_loan_payments(user)
+        loan_setting = MicroFinance.get_loan_setting!(user.id)
+
+        render(conn, "loan.json",
+         %{loan_taken: loan_taken,
+         loan_payments: loan_payments,
+          loan_setting: loan_setting})
+
+      true ->
+        {:error, "All loans are cleared"}
+    end
+  end
 end

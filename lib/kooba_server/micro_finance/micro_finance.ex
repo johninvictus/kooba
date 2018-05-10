@@ -242,7 +242,11 @@ defmodule KoobaServer.MicroFinance do
   def get_loan_taken!(id), do: Repo.get!(LoanTaken, id)
 
   def user_has_loan?(user_id) do
-    query = from(c in LoanTaken, where: c.user_id == ^user_id and c.status == "active")
+    query =
+      from(
+        c in LoanTaken,
+        where: (c.user_id == ^user_id and c.status == "active") or c.status == "pending"
+      )
 
     Repo.one(query)
     |> case do
@@ -439,6 +443,13 @@ defmodule KoobaServer.MicroFinance do
       )
 
     Repo.all(q)
+  end
+
+  @doc """
+  Return all payments associated to the open_loan taken
+  """
+  def get_loan_associated_payments(%LoanTaken{} = loan_payment) do
+    from(c in LoanPayment, where: c.loan_taken_id == ^loan_payment.id) |> Repo.all()
   end
 
   def get_open_loan(loan_taken_id) do

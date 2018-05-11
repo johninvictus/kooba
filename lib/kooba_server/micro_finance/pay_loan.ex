@@ -1,6 +1,8 @@
 defmodule KoobaServer.MicroFinance.PayLoan do
   use KoobaServer.MicroFinance.Model
 
+  require Logger
+
   @doc """
   Pay loan
   """
@@ -59,7 +61,9 @@ defmodule KoobaServer.MicroFinance.PayLoan do
 
   defp update_struct_amount(transaction) do
     tran_map = Map.from_struct(transaction)
-    %{tran_map | amount_string: Money.no_currency_to_string(tran_map.amount)}
+
+    map = %{tran_map | amount_string: Money.no_currency_to_string(tran_map.amount)}
+    %{map | payment_schedue_string: NaiveDateTime.to_string(transaction.payment_schedue)}
   end
 
   defp list_loan_payments(loan_payments, amount) do
@@ -75,26 +79,63 @@ defmodule KoobaServer.MicroFinance.PayLoan do
   end
 
   defp pay_payment(payment, %Money{cents: cash} = amount) do
-    %Money{cents: paycents} = payment.payment_remaining
-    # cash is bigger
-    if paycents <= cash do
-      remaining_cash = Money.subtract(amount, payment.payment_remaining)
-      update_status = %{payment | status: "paid"}
+    # %Money{cents: paycents} = payment.payment_remaining
+    # # cash is bigger
+    # if paycents <= cash do
+    #   remaining_cash = Money.subtract(amount, payment.payment_remaining)
+    #   update_status = %{payment | status: "paid"}
+    #
+    #   Logger.debug("Greater value ::")
+    #
+    #   {Map.put(
+    #      update_status,
+    #      :payment_remaining_string,
+    #      Money.no_currency_to_string(%Money{cents: 0, currency: "KSH"})
+    #    ), remaining_cash}
+    # else
+    #   # payment is higher
+    #   payment_remainder = Money.subtract(payment.payment_remaining, amount)
+    #
+    #   Logger.debug("Lowe value ::")
+    #
+    #   {Map.put(
+    #      payment,
+    #      :payment_remaining_string,
+    #      Money.no_currency_to_string(payment_remainder)
+    #    ), %Money{cents: 0, currency: "KSH"}}
+    # end
 
-      {Map.put(
-         update_status,
-         :payment_remaining_string,
-         Money.no_currency_to_string(%Money{cents: 0, currency: "KSH"})
-       ), remaining_cash}
-    else
-      # payment is higher
-      payment_remainder = Money.subtract(payment.payment_remaining, amount)
+    %Money{cents: payment_cents} = payment.payment_remaining
 
-      {Map.put(
-         payment,
-         :payment_remaining_string,
-         Money.no_currency_to_string(payment_remainder)
-       ), %Money{cents: 0, currency: "KSH"}}
-    end
+    remaining_cash =
+      cond do
+        payment_cents <= cash && cash != 0 ->
+          new_money = Money.subtract(amount, payment.payment_remaining)
+          payed_money = %Money{cents: 0, currency: "KSH"}
+
+          {payed_money, new_money}
+
+        payment_cents > cash ->
+          payed_money = Money.subtract(payment.payment_remaining, amount)
+          new_money = %Money{cents: 0, currency: "KSH"}
+
+          {payed_money, new_money}
+      end
+
+    {%Money{cents: payed_cents} = payed_money, new_money} = remaining_cash
+
+    status =
+      cond do
+        payed_cents == 0 ->
+          "paid"
+
+        true ->
+          "unpaid"
+      end
+
+    update_status = %{payment | status: status}
+
+    {Map.put(update_status, :payment_remaining_string, Money.no_currency_to_string(payed_money)),
+     new_money}
   end
 end

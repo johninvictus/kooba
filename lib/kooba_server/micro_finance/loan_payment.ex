@@ -1,5 +1,8 @@
 defmodule KoobaServer.MicroFinance.LoanPayment do
   use Ecto.Schema
+
+  require Logger
+
   import Ecto.Changeset
   import Ecto
   alias KoobaServer.MicroFinance.LoanPayment
@@ -76,6 +79,7 @@ defmodule KoobaServer.MicroFinance.LoanPayment do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         data = changeset |> apply_changes()
+        Logger.debug(data.payment_remaining_string)
         payment_remaining = Money.new("#{data.payment_remaining_string} " <> "KSH")
         put_change(changeset, :payment_remaining, payment_remaining)
 

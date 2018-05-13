@@ -56,4 +56,10 @@ config :kooba_server, KoobaServer.Guardian,
 config :mpesa_elixir,
   api_url: "https://sandbox.safaricom.co.ke",
   consumer_key: "frGlHwNAAIGm6kpKtA1kpmnld9gkzxi8",
-  consumer_secret: "uHqzvCmOXeA8ljda"
+  consumer_secret: "uHqzvCmOXeA8ljda",
+  b2c_initiator_name: "apitest361",
+  b2c_short_code: "600441",
+  c2b_initiator_name: "",
+  c2b_short_code: "",
+  b2c_queue_time_out_url: "https://f8e607d1.ngrok.io/mpesa/callbacks/validation",
+  b2c_result_url: "https://f8e607d1.ngrok.io/mpesa/callbacks/validation"

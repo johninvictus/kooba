@@ -32,7 +32,7 @@ defmodule KoobaServer.Mpesa.B2c do
       "Occasion" => occasion
     }
 
-    MpesaElixir.post("/b2c/v1/paymentrequest", body: Poison.encode!(body))
-    |> MpesaElixir.process_response()
+    Mpesa.post("/b2c/v1/paymentrequest", body: Poison.encode!(body))
+    |> Mpesa.process_response()
   end
 end

@@ -40,6 +40,7 @@
                         'Elixir.KoobaServer.Mpesa.Auth.PublicKey',
                         'Elixir.KoobaServer.Mpesa.Auth.PublicKey.Record',
                         'Elixir.KoobaServer.Mpesa.B2c',
+                        'Elixir.KoobaServer.Mpesa.C2b',
                         'Elixir.KoobaServer.Queues.AndroidNotification',
                         'Elixir.KoobaServer.Queues.SmsNotification',
                         'Elixir.KoobaServer.Repo',

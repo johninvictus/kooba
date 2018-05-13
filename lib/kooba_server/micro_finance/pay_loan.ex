@@ -79,32 +79,6 @@ defmodule KoobaServer.MicroFinance.PayLoan do
   end
 
   defp pay_payment(payment, %Money{cents: cash} = amount) do
-    # %Money{cents: paycents} = payment.payment_remaining
-    # # cash is bigger
-    # if paycents <= cash do
-    #   remaining_cash = Money.subtract(amount, payment.payment_remaining)
-    #   update_status = %{payment | status: "paid"}
-    #
-    #   Logger.debug("Greater value ::")
-    #
-    #   {Map.put(
-    #      update_status,
-    #      :payment_remaining_string,
-    #      Money.no_currency_to_string(%Money{cents: 0, currency: "KSH"})
-    #    ), remaining_cash}
-    # else
-    #   # payment is higher
-    #   payment_remainder = Money.subtract(payment.payment_remaining, amount)
-    #
-    #   Logger.debug("Lowe value ::")
-    #
-    #   {Map.put(
-    #      payment,
-    #      :payment_remaining_string,
-    #      Money.no_currency_to_string(payment_remainder)
-    #    ), %Money{cents: 0, currency: "KSH"}}
-    # end
-
     %Money{cents: payment_cents} = payment.payment_remaining
 
     remaining_cash =

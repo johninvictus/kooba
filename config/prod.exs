@@ -66,4 +66,29 @@ config :kooba_server, KoobaServer.Guardian,
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
+
+config :mpesa_elixir,
+  api_url: "https://sandbox.safaricom.co.ke",
+  consumer_key: "",
+  consumer_secret: "",
+  pass_key: "",
+  confirmation_url: "",
+  validation_url: "",
+  short_code: "",
+  b2c_short_code: "",
+  response_type: "Cancelled",
+  certificate_path: "./lib/mpesa_elixir/keys/sandbox_cert.cer",
+  initiator_name: "apiop39",
+  b2c_queue_time_out_url: "",
+  b2c_result_url: "",
+  b2b_queue_time_out_url: "",
+  b2b_result_url: "",
+  balance_queue_time_out_url: "",
+  balance_result_url: "",
+  status_queue_time_out_url: "",
+  status_result_url: "",
+  reversal_queue_time_out_url: "",
+  reversal_result_url: "",
+  stk_call_back_url: ""
+
 import_config "prod.secret.exs"

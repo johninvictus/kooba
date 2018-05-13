@@ -36,8 +36,7 @@ config :logger, :console, format: "[$level] $message\n"
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
-config :logger,
-  level: :debug
+config :logger, level: :debug
 
 # Configure your database
 config :kooba_server, KoobaServer.Repo,
@@ -52,3 +51,9 @@ config :kooba_server, KoobaServer.Guardian,
   issuer: "kooba_server",
   ttl: {30, :days},
   secret_key: "LG17BzmhBeq81Yyyn6vH7GVdrCkQpLktol2vdXlBzkRRHpYsZwluKMG9r6fnu90m"
+
+# mpesa configs
+config :mpesa_elixir,
+  api_url: "https://sandbox.safaricom.co.ke",
+  consumer_key: "frGlHwNAAIGm6kpKtA1kpmnld9gkzxi8",
+  consumer_secret: "uHqzvCmOXeA8ljda"

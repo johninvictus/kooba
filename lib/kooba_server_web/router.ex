@@ -46,20 +46,23 @@ defmodule KoobaServerWeb.Router do
     # update or create
     post("/user/credentials", CredentialsController, :create)
 
-    post("loan/request", LoanController, :request)
+    post("/loan/request", LoanController, :request)
 
     # show loan state, limit, loans settings, purnishment
-    get("kooba/state", KoobaController, :state)
+    get("/kooba/state", KoobaController, :state)
 
     # show loans taken and payment
-    get("kooba/loan", KoobaController, :loan)
+    get("/kooba/loan", KoobaController, :loan)
   end
 
-  scope "/mpesa", KoobaServerWeb do
+  scope "/v1x_mpesa", KoobaServerWeb do
     pipe_through(:api)
 
     post("/callbacks/confirmation", MpesaController, :confirmation)
     post("/callbacks/validation", MpesaController, :validation)
+
+    # b2c urls
+    post("/b2c/callback_url", MpesaController, :b2c)
   end
 
   scope "/exq", ExqUi do

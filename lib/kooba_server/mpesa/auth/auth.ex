@@ -76,12 +76,17 @@ defmodule KoobaServer.Mpesa.Auth do
   end
 
   @doc """
+  get security creadential that will be used to generate a valid public key
+  """
+  def get_security_credential do
+    Application.get_env(:mpesa_elixir, :security_credential, "")
+  end
+
+  @doc """
   This function will generate a securty key to use with SecurityCredential
   """
   def security do
-    plain_text = "Safaricom133!"
-
     PublicKey.extract_public_from()
-    |> PublicKey.generate_base64_cypherstring(plain_text)
+    |> PublicKey.generate_base64_cypherstring(get_security_credential())
   end
 end

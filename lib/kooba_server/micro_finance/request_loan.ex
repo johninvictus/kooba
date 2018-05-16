@@ -1,6 +1,8 @@
 defmodule KoobaServer.MicroFinance.RequestLoan do
   alias KoobaServer.MicroFinance
   alias KoobaServer.Accounts.User
+  alias KoobaServer.Money
+  alias KoobaServer.Schedulers
   use KoobaServer.MicroFinance.Model
   use Timex
 
@@ -123,10 +125,17 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
         end)
         |> Ecto.Multi.run(:update, fn %{loan_payments: loan_payments, loan_taken: loan_taken} ->
           # // TODO: calculate interest from the loan taken entries and update the loan taken interest amount
-          MicroFinance.update_loan_taken(
-            loan_taken,
-            generate_update_map(loan_payments, loan_taken)
-          )
+          {:ok, loan_update} =
+            MicroFinance.update_loan_taken(
+              loan_taken,
+              generate_update_map(loan_payments, loan_taken)
+            )
+
+          Exq.enqueue(Exq, "mpesa_loan", KoobaServer.Queues.MpesaLoan, [
+            %{"loan_id" => loan_update.id}
+          ])
+
+          {:ok, loan_update}
         end)
 
       case Repo.transaction(multi) do

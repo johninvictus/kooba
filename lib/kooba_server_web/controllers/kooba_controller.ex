@@ -36,10 +36,11 @@ defmodule KoobaServerWeb.KoobaController do
         loan_payments = MicroFinance.get_loan_payments(user)
         loan_setting = MicroFinance.get_loan_setting!(user.id)
 
-        render(conn, "loan.json",
-         %{loan_taken: loan_taken,
-         loan_payments: loan_payments,
-          loan_setting: loan_setting})
+        render(conn, "loan.json", %{
+          loan_taken: loan_taken,
+          loan_payments: loan_payments,
+          loan_setting: loan_setting
+        })
 
       true ->
         {:error, "All loans are cleared"}

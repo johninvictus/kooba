@@ -23,6 +23,7 @@ defmodule KoobaServer.MicroFinance.LoanTaken do
     belongs_to(:user, KoobaServer.Accounts.User)
     belongs_to(:loan_setting, KoobaServer.MicroFinance.LoanSetting)
     has_many(:loan_payments, KoobaServer.MicroFinance.LoanPayment)
+    has_many(:send_money_request, KoobaServer.MpesaTransaction.SendMoneyRequest)
 
     timestamps()
   end

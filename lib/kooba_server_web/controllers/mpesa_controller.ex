@@ -12,7 +12,7 @@ defmodule KoobaServerWeb.MpesaController do
   end
 
   def confirmation(conn, %{"pass" => pass} = params) do
-    if(pass == @pass) do
+    if(pass != @pass) do
       send_resp(conn, 401, "Not authorized")
     end
 
@@ -25,14 +25,18 @@ defmodule KoobaServerWeb.MpesaController do
     end
 
     cond do
-      type == "timeout" ->
-        send_resp(conn, 200, Poison.encode!(params))
-
       type == "result" ->
-        send_resp(conn, 200, Poison.encode!(params))
+        # extract the OriginatorConversationID, ConversationID, TransactionID
+        encoded_data = params |> Poison.encode!()
 
-      true ->
-        send_resp(conn, 401, "Not authorized")
+      # TODO: when I have a live mpesa server
+      # use get_int to get the values easy
+      # check if the transaction exists on the table
+      # update the table
+      # send a notification and sms notifying the use the loan has been received
+
+      type == "timeout" ->
+        send_resp(conn, 401, "Can not process entity #{type}")
     end
   end
 end

@@ -11,14 +11,14 @@ defmodule KoobaServer.Mpesa.Auth do
   get customer secret key from config file
   """
   def get_consumer_secret do
-    Application.get_env(:mpesa_elixir, :consumer_secret) || ""
+    Application.get_env(:kooba_server, :consumer_secret) || ""
   end
 
   @doc """
   get customer key from config file
   """
   def get_consumer_key do
-    Application.get_env(:mpesa_elixir, :consumer_key) || ""
+    Application.get_env(:kooba_server, :consumer_key) || ""
   end
 
   @doc """
@@ -79,7 +79,7 @@ defmodule KoobaServer.Mpesa.Auth do
   get security creadential that will be used to generate a valid public key
   """
   def get_security_credential do
-    Application.get_env(:mpesa_elixir, :security_credential, "")
+    Application.get_env(:kooba_server, :security_credential, "")
   end
 
   @doc """

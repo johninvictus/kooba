@@ -3,10 +3,10 @@ defmodule KoobaServer.Mpesa do
 
   alias KoobaServer.Mpesa.Auth
 
-  @user_agent "mpesa_elixir"
+  @user_agent "kooba_server"
 
   def get_api_base_url do
-    Application.get_env(:mpesa_elixir, :api_url, "")
+    Application.get_env(:kooba_server, :api_url, "")
   end
 
   @doc """

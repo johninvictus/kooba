@@ -14,6 +14,7 @@ defmodule KoobaServer.Accounts.User do
     has_one(:device, KoobaServer.DeviceManager.Device)
     has_one(:loan_limit, KoobaServer.MicroFinance.LoanLimit)
     has_many(:loans, KoobaServer.MicroFinance.LoanTaken)
+    has_many(:notifications, KoobaServer.Notify.Notification)
 
     timestamps()
   end

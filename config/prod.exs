@@ -67,7 +67,7 @@ config :kooba_server, KoobaServer.Guardian,
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 
-config :mpesa_elixir,
+config :kooba_server,
   api_url: "https://sandbox.safaricom.co.ke",
   consumer_key: "frGlHwNAAIGm6kpKtA1kpmnld9gkzxi8",
   consumer_secret: "uHqzvCmOXeA8ljda",

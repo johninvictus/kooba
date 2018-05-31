@@ -20,7 +20,15 @@ defmodule KoobaServer.Mixfile do
   def application do
     [
       mod: {KoobaServer.Application, []},
-      extra_applications: [:logger, :runtime_tools, :httpoison, :timex, :exq, :exq_ui]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :httpoison,
+        :timex,
+        :exq,
+        :exq_ui,
+        :scrivener_ecto
+      ]
     ]
   end
 
@@ -50,7 +58,8 @@ defmodule KoobaServer.Mixfile do
       {:httpotion, "~> 3.1.0"},
       {:elixir_xml_to_map, "~> 0.1"},
       {:fcmex, "~> 0.1.2"},
-      {:mpesa_elixir, "~> 0.1.0"}
+      {:scrivener_ecto, "~> 1.0"},
+      {:scrivener_headers, "~> 3.0"}
     ]
   end
 

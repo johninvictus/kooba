@@ -53,9 +53,12 @@ defmodule KoobaServerWeb.Router do
 
     # show loans taken and payment
     get("/kooba/loan", KoobaController, :loan)
+
+    # get all user notification
+    get("/user/notifications", NotifyController, :index)
   end
 
-  scope "/v1x_mpesa", KoobaServerWeb do
+  scope "/money", KoobaServerWeb do
     pipe_through(:api)
 
     post("/callbacks/confirmation", MpesaController, :confirmation)

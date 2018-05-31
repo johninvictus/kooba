@@ -5,25 +5,25 @@ defmodule KoobaServer.Mpesa.C2b do
   Get the confirmation url from the config file
   """
   def get_confirmation_url do
-    Application.get_env(:mpesa_elixir, :confirmation_url)
+    Application.get_env(:kooba_server, :confirmation_url)
   end
 
   @doc """
   Get the validation url from the config file
   """
   def get_validation_url do
-    Application.get_env(:mpesa_elixir, :validation_url)
+    Application.get_env(:kooba_server, :validation_url)
   end
 
   @doc """
   get the response type from the config
   """
   def get_response_type do
-    Application.get_env(:mpesa_elixir, :response_type)
+    Application.get_env(:kooba_server, :response_type)
   end
 
   def get_c2b_short_code do
-    Application.get_env(:mpesa_elixir, :c2b_short_code)
+    Application.get_env(:kooba_server, :c2b_short_code)
   end
 
   def register_callbacks do

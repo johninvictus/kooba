@@ -3,11 +3,11 @@ defmodule KoobaServer.Mpesa.StkPush do
   alias KoobaServer.Mpesa.C2b
 
   def get_stk_call_back_url do
-    Application.get_env(:mpesa_elixir, :stk_call_back_url)
+    Application.get_env(:kooba_server, :stk_call_back_url)
   end
 
   def get_pass_key do
-    Application.get_env(:mpesa_elixir, :pass_key)
+    Application.get_env(:kooba_server, :pass_key)
   end
 
   def processrequest(

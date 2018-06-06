@@ -2,6 +2,7 @@ defmodule KoobaServerWeb.KoobaController do
   use KoobaServerWeb, :controller
 
   alias KoobaServer.MicroFinance
+  alias KoobaServer.Accounts
 
   action_fallback(KoobaServerWeb.FallbackController)
 
@@ -45,5 +46,20 @@ defmodule KoobaServerWeb.KoobaController do
       true ->
         {:error, "All loans are cleared"}
     end
+  end
+
+  def profile(conn, params, user) do
+    # user
+    # credentials
+    # loan taken list
+    user_details = Accounts.get_user_detail(user)
+    page = MicroFinance.paginate_user_loan_taken(user.id, params)
+
+    conn
+    |> render(KoobaServerWeb.KoobaView, "profile.json", %{
+      user: user,
+      credentials: user_details,
+      loans_taken: page.entries
+    })
   end
 end

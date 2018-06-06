@@ -140,6 +140,21 @@ defmodule KoobaServerWeb.KoobaView do
     }
   end
 
+  def render("profile.json", %{user: user, credentials: credentials, loans_taken: loans_taken}) do
+    %{
+      user: render_one(user, KoobaServerWeb.UserView, "user.json", as: :user),
+      credentials:
+        render_one(
+          credentials,
+          KoobaServerWeb.CredentialsView,
+          "credentials.json",
+          as: :credentials
+        ),
+      loans_taken:
+        render_many(loans_taken, KoobaServerWeb.KoobaView, "loan_taken.json", as: :loan_taken)
+    }
+  end
+
   defp format_naive_date(date) do
     "#{date.day}-#{date.month}-#{date.year}"
   end

@@ -7,6 +7,7 @@ defmodule KoobaServer.Notify do
   alias KoobaServer.Repo
 
   alias KoobaServer.Notify.Notification
+  alias KoobaServer.Accounts.User
 
   @doc """
   Returns the list of notifications.
@@ -17,8 +18,9 @@ defmodule KoobaServer.Notify do
       [%Notification{}, ...]
 
   """
-  def list_notifications do
-    Repo.all(Notification)
+  def list_notifications(user_id) do
+    query = from(n in Notification, where: n.user_id == ^user_id, order_by: n.inserted_at)
+    Repo.all(query)
   end
 
   def pagenated_notifications(params, user_id) do
@@ -54,10 +56,10 @@ defmodule KoobaServer.Notify do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_notification(attrs \\ %{}) do
-    %Notification{}
+  def create_notification(%User{} = user, attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:notifications)
     |> Notification.changeset(attrs)
-    |> Repo.insert()
   end
 
   @doc """

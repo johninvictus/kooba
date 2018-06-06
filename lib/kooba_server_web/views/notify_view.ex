@@ -15,7 +15,8 @@ defmodule KoobaServerWeb.NotifyView do
     %{
       id: notification.id,
       message: notification.message,
-      json_body: notification.json_body
+      json_body: notification.json_body,
+      date: Date.to_string(notification.inserted_at)
     }
   end
 

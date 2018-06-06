@@ -56,6 +56,11 @@ defmodule KoobaServerWeb.Router do
 
     # get all user notification
     get("/user/notifications", NotifyController, :index)
+
+    # get profile for user
+    get("/user/profile", KoobaController, :profile)
+    # get full loan history
+    get("/user/loan_history", LoanController, :history)
   end
 
   scope "/money", KoobaServerWeb do

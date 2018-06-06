@@ -24,11 +24,16 @@ defmodule KoobaServerWeb.KoobaView do
     }
   end
 
-  def render("loan.json", %{loan_taken: loan_taken, loan_payments: loan_payments, loan_setting: loan_setting}) do
+  def render("loan.json", %{
+        loan_taken: loan_taken,
+        loan_payments: loan_payments,
+        loan_setting: loan_setting
+      }) do
     %{
       data: %{
         loan_taken: render_one(loan_taken, __MODULE__, "loan_taken.json", as: :loan_taken),
-        loan_setting: render_one(loan_setting, __MODULE__, "loan_setting.json", as: :loan_setting),
+        loan_setting:
+          render_one(loan_setting, __MODULE__, "loan_setting.json", as: :loan_setting),
         loan_payments:
           render_many(loan_payments, __MODULE__, "loan_payments.json", as: :loan_payment)
       }
@@ -124,6 +129,14 @@ defmodule KoobaServerWeb.KoobaView do
         currency: payment_remaining_currency
       },
       payment_schedue: format_naive_date(loan_payment.payment_schedue)
+    }
+  end
+
+  def render("loan_history.json", %{loans_taken: loans_taken, pagination: pagination}) do
+    %{
+      pagination:
+        render_one(pagination, KoobaServerWeb.NotifyView, "pagination.json", as: :pagination),
+      loans_taken: render_many(loans_taken, __MODULE__, "loan_taken.json", as: :loan_taken)
     }
   end
 

@@ -1,8 +1,8 @@
 defmodule KoobaServer.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias KoobaServer.Accounts.User
   alias KoobaServer.MicroFinance.LoanLimit
+  alias KoobaServer.Accounts.User
 
   schema "users" do
     field(:access_token, :string)

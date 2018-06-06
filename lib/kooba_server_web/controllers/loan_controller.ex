@@ -2,6 +2,7 @@ defmodule KoobaServerWeb.LoanController do
   use KoobaServerWeb, :controller
 
   alias KoobaServer.MicroFinance.RequestLoan
+  alias KoobaServer.MicroFinance
 
   action_fallback(KoobaServerWeb.FallbackController)
 
@@ -23,18 +24,33 @@ defmodule KoobaServerWeb.LoanController do
   """
   def request(conn, params, user) do
     case RequestLoan.request(user, params) do
-        {:ok, _result} ->
-          conn
-          |> put_status(:ok)
-          |> render("request.json", %{message: "Loan successifully taken"})
+      {:ok, _result} ->
+        conn
+        |> put_status(:ok)
+        |> render("request.json", %{message: "Loan successifully taken"})
 
-        {:error, changeset} ->
-          {:error, changeset}
+      {:error, changeset} ->
+        {:error, changeset}
 
-        _ ->
+      _ ->
         conn
         |> put_status(:internal_server_error)
-        |> render(KoobaServerWeb.ErrorView, "error.json", %{message: "An error occured while submiting your loan request, please try again"})
+        |> render(KoobaServerWeb.ErrorView, "error.json", %{
+          message: "An error occured while submiting your loan request, please try again"
+        })
     end
+  end
+
+  def history(conn, params, user) do
+    page = MicroFinance.paginate_user_loan_taken(user.id, params)
+
+    conn
+    |> put_status(:ok)
+    |> render(
+      KoobaServerWeb.KoobaView,
+      "loan_history.json",
+      loans_taken: page.entries,
+      pagination: page
+    )
   end
 end

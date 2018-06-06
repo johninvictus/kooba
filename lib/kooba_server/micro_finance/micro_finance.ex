@@ -226,6 +226,14 @@ defmodule KoobaServer.MicroFinance do
   end
 
   @doc """
+  paginate all loan taken by the user
+  """
+  def paginate_user_loan_taken(user_id, params) do
+    from(n in LoanTaken, where: n.user_id == ^user_id, order_by: n.inserted_at)
+    |> Repo.paginate(params)
+  end
+
+  @doc """
   Gets a single loan_taken.
 
   Raises `Ecto.NoResultsError` if the Loan taken does not exist.

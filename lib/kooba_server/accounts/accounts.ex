@@ -9,7 +9,6 @@ defmodule KoobaServer.Accounts do
   alias KoobaServer.Repo
   alias KoobaServer.Accounts.User
 
-
   @doc """
   Returns the list of users.
 
@@ -52,7 +51,7 @@ defmodule KoobaServer.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-     User.build(attrs)
+    User.build(attrs)
     |> Repo.insert()
   end
 

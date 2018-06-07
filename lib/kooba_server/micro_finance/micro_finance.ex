@@ -249,11 +249,15 @@ defmodule KoobaServer.MicroFinance do
   """
   def get_loan_taken!(id), do: Repo.get!(LoanTaken, id)
 
+  require Logger
+
   def user_has_loan?(user_id) do
+    Logger.debug(user_id)
+
     query =
       from(
         c in LoanTaken,
-        where: (c.user_id == ^user_id and c.status == "active") or c.status == "pending"
+        where: c.user_id == ^user_id and (c.status == "active" or c.status == "pending")
       )
 
     Repo.one(query)
@@ -270,7 +274,7 @@ defmodule KoobaServer.MicroFinance do
     query =
       from(
         c in LoanTaken,
-        where: (c.user_id == ^user.id and c.status == "active") or c.status == "pending"
+        where: c.user_id == ^user.id and (c.status == "active" or c.status == "pending")
       )
 
     Repo.one(query)
@@ -447,7 +451,7 @@ defmodule KoobaServer.MicroFinance do
     q =
       from(
         c in LoanPayment,
-        where: (c.loan_taken_id == ^open_loan.id and c.status == "unpaid") or c.status == "late"
+        where: c.loan_taken_id == ^open_loan.id and (c.status == "unpaid" or c.status == "late")
       )
 
     Repo.all(q)
@@ -489,7 +493,7 @@ defmodule KoobaServer.MicroFinance do
     q =
       from(
         c in LoanPayment,
-        where: (c.loan_taken_id == ^loan_taken_id and c.status == "unpaid") or c.status == "late"
+        where: c.loan_taken_id == ^loan_taken_id and (c.status == "unpaid" or c.status == "late")
       )
 
     case Repo.all(q) do

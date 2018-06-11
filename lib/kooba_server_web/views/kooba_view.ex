@@ -105,7 +105,8 @@ defmodule KoobaServerWeb.KoobaView do
       late_fee: %{
         cents: late_fee_cent,
         currency: late_fee_currency
-      }
+      },
+      loan_taken_date: format_naive_date(loan_taken.inserted_at)
     }
   end
 

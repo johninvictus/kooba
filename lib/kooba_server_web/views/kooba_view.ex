@@ -64,8 +64,10 @@ defmodule KoobaServerWeb.KoobaView do
       id: loan_setting.id,
       name: loan_setting.name,
       interest: loan_setting.interest,
+      late_interest: loan_setting.late_interest,
       term: loan_setting.term,
       term_measure: loan_setting.term_measure,
+      frequency: loan_setting.frequency,
       min_amount: %{
         cents: cents,
         currency: currency

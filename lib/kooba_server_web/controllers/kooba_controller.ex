@@ -62,4 +62,21 @@ defmodule KoobaServerWeb.KoobaController do
       loans_taken: page.entries
     })
   end
+
+  def single_loan(conn, params, user) do
+    # can be nil
+    loan_taken =
+      MicroFinance.get_user_single_loan(user, params["loan_id"])
+      |> KoobaServer.Repo.preload(:loan_payments)
+      |> KoobaServer.Repo.preload(:loan_setting)
+
+    loan_payments = loan_taken.loan_payments
+    loan_setting = loan_taken.loan_setting
+
+    render(conn, "loan.json", %{
+      loan_taken: loan_taken,
+      loan_payments: loan_payments,
+      loan_setting: loan_setting
+    })
+  end
 end

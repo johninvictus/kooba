@@ -192,14 +192,16 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
     # // TODO: make sure it does not return float number
     factor = (loan_settings.term / (length * loan_settings.frequency)) |> trunc()
 
+    # // TODO: does not factor incase of float days may result into reduced payment days
+    offset_days = (loan_settings.term / factor) |> trunc()
+
     # add 1 to remove the round of error
     equal_payments =
-      (convert_money_to_integer(loan_taken.loan_total) / factor + 1)
+      (convert_money_to_integer(loan_taken.loan_total) / factor + (factor / offset_days))
       |> trunc()
       |> convert_to_money()
 
-    # // TODO: does not factor incase of float days may result into reduced payment days
-    offset_days = (loan_settings.term / factor) |> trunc()
+
 
     generate_payments(equal_payments, factor, offset_days)
   end

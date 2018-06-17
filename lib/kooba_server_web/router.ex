@@ -61,6 +61,9 @@ defmodule KoobaServerWeb.Router do
     get("/user/profile", KoobaController, :profile)
     # get full loan history
     get("/user/loan_history", LoanController, :history)
+
+    # get loan payments
+    get("/kooba/loan/:loan_id", KoobaController, :single_loan)
   end
 
   scope "/money", KoobaServerWeb do

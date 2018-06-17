@@ -226,6 +226,15 @@ defmodule KoobaServer.MicroFinance do
   end
 
   @doc """
+  Get single user loan
+  """
+
+  def get_user_single_loan(user, loan_id) do
+    q = from n in LoanTaken, where: (n.user_id ==^user.id and n.id == ^loan_id), order_by: n.inserted_at
+    q |> Repo.one()
+  end
+
+  @doc """
   paginate all loan taken by the user
   """
   def paginate_user_loan_taken(user_id, params) do

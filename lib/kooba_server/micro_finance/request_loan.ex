@@ -131,6 +131,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
               generate_update_map(loan_payments, loan_taken)
             )
 
+          # send an id to queue in order to send it to user
           Exq.enqueue(Exq, "mpesa_loan", KoobaServer.Queues.MpesaLoan, [
             %{"loan_id" => loan_update.id}
           ])

@@ -10,6 +10,9 @@ defmodule KoobaServer.Queues.MpesaLoan do
     loan_taken = KoobaServer.Repo.get(LoanTaken, params["loan_id"])
 
     %Money{cents: cents} = loan_taken.loan_total
+
+    # loan taken, send this via mpesa
+    # b2c
     total_amount = (cents / 100) |> trunc()
 
     preloanded_loan = loan_taken |> KoobaServer.Repo.preload(:user)
@@ -23,7 +26,9 @@ defmodule KoobaServer.Queues.MpesaLoan do
       |> String.replace("+", "")
       |> String.trim()
 
+    # logic to send
     result = Mpesa.B2c.payment_request("BusinessPayment", total_amount, partyb, "loan", "loan")
+    Logger.info(result)
 
     case result do
       {:ok, params, _result} ->

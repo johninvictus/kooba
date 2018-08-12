@@ -76,6 +76,12 @@ defmodule KoobaServerWeb.Router do
     post("/b2c/callback_url", MpesaController, :b2c)
   end
 
+  scope "/admin", KoobaServerWeb do
+      pipe_through([:api, :api_auth])
+
+      get("/dashboard", AdminDashboard, :index)
+  end
+
   scope "/exq", ExqUi do
     pipe_through(:exq)
     forward("/", RouterPlug.Router, :index)

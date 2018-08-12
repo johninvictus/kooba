@@ -197,7 +197,7 @@ defmodule KoobaServer.MicroFinance.RequestLoan do
 
     # add 1 to remove the round of error
     equal_payments =
-      (convert_money_to_integer(loan_taken.loan_total) / factor + (factor / offset_days))
+      (convert_money_to_integer((loan_taken.loan_total) / factor) + (factor / offset_days))
       |> trunc()
       |> convert_to_money()
 

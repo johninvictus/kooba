@@ -55,6 +55,7 @@
                         'Elixir.KoobaServer.Wallet',
                         'Elixir.KoobaServer.Wallet.WalletAccount',
                         'Elixir.KoobaServerWeb',
+                        'Elixir.KoobaServerWeb.AdminDashboard',
                         'Elixir.KoobaServerWeb.ChangesetView',
                         'Elixir.KoobaServerWeb.ChannelCase',
                         'Elixir.KoobaServerWeb.ConnCase',

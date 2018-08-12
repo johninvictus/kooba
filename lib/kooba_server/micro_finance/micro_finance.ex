@@ -561,5 +561,48 @@ defmodule KoobaServer.MicroFinance do
     Duration.diff(duration, Duration.zero(), :days)
   end
 
+  @doc """
+  return the number of active, pending and late loans
+  """
+  def count_all_taken_loans do
+    q = from l in LoanTaken,
+          where: (l.status == "active" or l.status == "pending" or l.status == "late"),
+          select: count(l.id)
+
+      Repo.one(q)
+  end
+
+  def count_all_pending_loans do
+    q = from l in LoanTaken,
+          where: (l.status == "pending"),
+          select: count(l.id)
+
+      Repo.one(q)
+  end
+
+  def count_all_active_loans do
+    q = from l in LoanTaken,
+          where: (l.status == "active"),
+          select: count(l.id)
+
+      Repo.one(q)
+  end
+
+  def count_all_late_loans do
+    q = from l in LoanTaken,
+          where: (l.status == "late"),
+          select: count(l.id)
+
+      Repo.one(q)
+  end
+
+  def count_all_closed_loans do
+    q = from l in LoanTaken,
+          where: (l.status == "closed"),
+          select: count(l.id)
+
+      Repo.one(q)
+  end
+
   # flag loans that are not pay after 2day to late and then move to the next payment
 end

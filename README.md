@@ -1,19 +1,19 @@
 # KoobaServer
 
-To start your Phoenix server:
+### This is a lending application line branch that uses elixir, postrgress, mpesa sandbox, redis works, double entry wallet, restiful api, phoenix and some maths.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phx.server`
+Will update on how to test it.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+### Reason to opensource it.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+- I feel am not capable of creating a microfinance by my own
+- I has served it purpose as a learning project.
+- maybe somebody else may like to improve it.
+- Show case the power of phoenix elixir
 
-## Learn more
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+### how to run it locally
+will update soon
+
+
+

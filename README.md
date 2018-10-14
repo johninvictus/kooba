@@ -1,6 +1,6 @@
 # KoobaServer
 
-### This is a lending application likee branch or Tala that uses elixir, postrgress, mpesa sandbox, redis works, double entry wallet, restiful api, phoenix and some maths.
+### This is a lending application like branch or Tala that uses elixir, postrgress, mpesa sandbox, redis works, double entry wallet, restiful api, phoenix and some maths.
 
 Will update on how to test it.
 

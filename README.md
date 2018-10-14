@@ -7,8 +7,8 @@ Will update on how to test it.
 ### Reason to opensource it.
 
 - I feel am not capable of creating a microfinance by my own
-- I has served it purpose as a learning project.
-- maybe somebody else may like to improve it.
+- It has served it purpose as a learning project.
+- Maybe somebody else may like to improve it.
 - Show case the power of phoenix elixir
 
 

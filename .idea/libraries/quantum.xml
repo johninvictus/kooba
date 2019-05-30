@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="quantum" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/quantum/ebin" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/quantum/lib" />
+    </SOURCES>
+  </library>
+</component>

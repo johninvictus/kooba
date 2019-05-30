@@ -1,5 +1,6 @@
 {application,guardian,
-             [{description,"Elixir Authentication framework"},
+             [{applications,[kernel,stdlib,elixir,logger,poison,jose,uuid]},
+              {description,"Elixir Authentication framework"},
               {modules,['Elixir.Guardian','Elixir.Guardian.Config',
                         'Elixir.Guardian.MalformedReturnValueError',
                         'Elixir.Guardian.Permissions.Bitwise',
@@ -21,5 +22,4 @@
                         'Elixir.Guardian.Token.Verify',
                         'Elixir.Mix.Tasks.Guardian.Gen.Secret']},
               {registered,[]},
-              {vsn,"1.0.1"},
-              {applications,[kernel,stdlib,elixir,logger,poison,jose,uuid]}]}.
+              {vsn,"1.0.1"}]}.

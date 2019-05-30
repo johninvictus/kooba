@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="scrivener_ecto" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/scrivener_ecto/ebin" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/scrivener_ecto/lib" />
+    </SOURCES>
+  </library>
+</component>

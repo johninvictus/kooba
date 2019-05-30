@@ -1,10 +1,10 @@
 {application,kooba_server,
              [{applications,[kernel,stdlib,elixir,logger,runtime_tools,
                              httpoison,timex,exq,exq_ui,scrivener_ecto,
-                             gettext,poison,fcmex,elixir_xml_to_map,
-                             phoenix_pubsub,cowboy,httpotion,cors_plug,
-                             scrivener_headers,phoenix,guardian,postgrex,
-                             quantum,phoenix_ecto]},
+                             gettext,poison,comeonin,argon2_elixir,fcmex,
+                             elixir_xml_to_map,phoenix_pubsub,cowboy,
+                             httpotion,cors_plug,scrivener_headers,phoenix,
+                             guardian,postgrex,quantum,phoenix_ecto]},
               {description,"kooba_server"},
               {modules,['Elixir.Inspect.Money','Elixir.KoobaServer',
                         'Elixir.KoobaServer.AccountKit',
@@ -88,6 +88,4 @@
                         'Elixir.String.Chars.Money']},
               {registered,[]},
               {vsn,"0.0.1"},
-              {mod,{'Elixir.KoobaServer.Application',[]}},
-              {extra_applications,[logger,runtime_tools,httpoison,timex,exq,
-                                   exq_ui,scrivener_ecto]}]}.
+              {mod,{'Elixir.KoobaServer.Application',[]}}]}.

@@ -20,6 +20,11 @@ defmodule KoobaServer.Repo.Migrations.CreateUsers do
 
       add(:access_token, :string)
 
+      add :user_type, :integer, default: 2
+      add :active, :boolean, default: false
+      add :password, :string, default: ""
+      add :card_provided, :boolean, default: false
+
       timestamps()
     end
 

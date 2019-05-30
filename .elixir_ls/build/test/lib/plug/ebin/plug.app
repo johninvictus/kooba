@@ -1,5 +1,6 @@
 {application,plug,
-             [{description,"A specification and conveniences for composable modules between web applications"},
+             [{applications,[kernel,stdlib,elixir,crypto,logger,mime]},
+              {description,"A specification and conveniences for composable modules between web applications"},
               {modules,['Elixir.Collectable.Plug.Conn',
                         'Elixir.Inspect.Plug.Conn','Elixir.Plug',
                         'Elixir.Plug.Adapters.Cowboy',
@@ -48,6 +49,5 @@
                         'Elixir.Plug.UploadError',plug_multipart]},
               {registered,[]},
               {vsn,"1.4.4"},
-              {applications,[kernel,stdlib,elixir,crypto,logger,mime]},
               {mod,{'Elixir.Plug',[]}},
               {env,[{validate_header_keys_during_test,true}]}]}.

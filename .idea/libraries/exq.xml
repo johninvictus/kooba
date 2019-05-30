@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="exq" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/exq/ebin" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/exq/lib" />
+    </SOURCES>
+  </library>
+</component>

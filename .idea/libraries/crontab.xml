@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="crontab" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/crontab/ebin" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/crontab/lib" />
+    </SOURCES>
+  </library>
+</component>

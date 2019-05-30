@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="base64url" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/base64url/ebin" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/base64url/src" />
+    </SOURCES>
+  </library>
+</component>

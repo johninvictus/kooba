@@ -1,5 +1,6 @@
 {application,phoenix_ecto,
-             [{description,"Integration between Phoenix & Ecto"},
+             [{applications,[kernel,stdlib,elixir,logger,ecto,plug]},
+              {description,"Integration between Phoenix & Ecto"},
               {modules,['Elixir.Phoenix.Ecto',
                         'Elixir.Phoenix.Ecto.SQL.Sandbox',
                         'Elixir.Phoenix.Ecto.SQL.SandboxSession',
@@ -16,5 +17,4 @@
               {registered,[]},
               {vsn,"3.3.0"},
               {mod,{'Elixir.Phoenix.Ecto',[]}},
-              {applications,[kernel,stdlib,elixir,logger,ecto,plug]},
               {env,[{exclude_ecto_exceptions_from_plug,[]}]}]}.

@@ -7,5 +7,4 @@
                         'Elixir.Combine.Parsers.Binary',
                         'Elixir.Combine.Parsers.Text']},
               {registered,[]},
-              {vsn,"0.10.0"},
-              {extra_applications,[]}]}.
+              {vsn,"0.10.0"}]}.

@@ -1,5 +1,7 @@
 {application,timex,
-             [{description,"Timex is a rich, comprehensive Date/Time library for Elixir projects, with full timezone support via the :tzdata package.\nIf you need to manipulate dates, times, datetimes, timestamps, etc., then Timex is for you!\n"},
+             [{applications,[kernel,stdlib,elixir,logger,tzdata,gettext,
+                             combine]},
+              {description,"Timex is a rich, comprehensive Date/Time library for Elixir projects, with full timezone support via the :tzdata package.\nIf you need to manipulate dates, times, datetimes, timestamps, etc., then Timex is for you!\n"},
               {modules,['Elixir.Enumerable.Timex.Interval',
                         'Elixir.Inspect.Timex.AmbiguousDateTime',
                         'Elixir.Inspect.Timex.AmbiguousTimezoneInfo',
@@ -62,7 +64,5 @@
                         'Elixir.Timex.Types']},
               {registered,[]},
               {vsn,"3.2.1"},
-              {applications,[kernel,stdlib,elixir,logger,tzdata,gettext,
-                             combine]},
               {env,[{local_timezone,nil},{default_locale,<<"en">>}]},
               {mod,{'Elixir.Timex',[]}}]}.

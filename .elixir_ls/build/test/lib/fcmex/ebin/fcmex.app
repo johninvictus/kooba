@@ -6,5 +6,4 @@
                         'Elixir.Fcmex.Payload','Elixir.Fcmex.Request',
                         'Elixir.Fcmex.Util']},
               {registered,[]},
-              {vsn,"0.1.2"},
-              {extra_applications,[logger,retry]}]}.
+              {vsn,"0.1.2"}]}.

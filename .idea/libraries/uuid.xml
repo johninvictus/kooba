@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="uuid" type="mix">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/uuid/ebin" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/uuid/lib" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,5 +1,5 @@
 {application,quantum,
-             [{applications,[kernel,stdlib,elixir,logger,crontab,gen_stage]},
+             [{applications,[kernel,stdlib,elixir,logger,gen_stage,crontab]},
               {description,"Cron-like job scheduler for Elixir."},
               {modules,['Elixir.Quantum','Elixir.Quantum.Application',
                         'Elixir.Quantum.DateLibrary',
@@ -27,5 +27,4 @@
                         'Elixir.Quantum.Util']},
               {registered,[]},
               {vsn,"2.2.7"},
-              {mod,{'Elixir.Quantum.Application',[]}},
-              {extra_applications,[logger]}]}.
+              {mod,{'Elixir.Quantum.Application',[]}}]}.

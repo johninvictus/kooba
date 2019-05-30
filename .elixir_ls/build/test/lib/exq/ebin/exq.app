@@ -1,5 +1,6 @@
 {application,exq,
-             [{description,"Exq is a job processing library compatible with Resque / Sidekiq for the Elixir language.\n"},
+             [{applications,[kernel,stdlib,elixir,logger,redix,uuid]},
+              {description,"Exq is a job processing library compatible with Resque / Sidekiq for the Elixir language.\n"},
               {modules,['Elixir.Exq','Elixir.Exq.Api','Elixir.Exq.Api.Server',
                         'Elixir.Exq.Api.Server.State',
                         'Elixir.Exq.Backoff.Behaviour',
@@ -43,5 +44,4 @@
                         'Elixir.Mix.Tasks.Exq.Run']},
               {registered,[]},
               {vsn,"0.10.1"},
-              {mod,{'Elixir.Exq',[]}},
-              {applications,[kernel,stdlib,elixir,logger,redix,uuid]}]}.
+              {mod,{'Elixir.Exq',[]}}]}.

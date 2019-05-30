@@ -1,5 +1,6 @@
 {application,poison,
-             [{description,"An incredibly fast, pure Elixir JSON library"},
+             [{applications,[kernel,stdlib,elixir]},
+              {description,"An incredibly fast, pure Elixir JSON library"},
               {modules,['Elixir.Poison','Elixir.Poison.Decode',
                         'Elixir.Poison.Decoder','Elixir.Poison.Decoder.Any',
                         'Elixir.Poison.Encode','Elixir.Poison.EncodeError',
@@ -20,5 +21,4 @@
                         'Elixir.Poison.Encoder.Time','Elixir.Poison.Parser',
                         'Elixir.Poison.Pretty','Elixir.Poison.SyntaxError']},
               {registered,[]},
-              {vsn,"3.1.0"},
-              {applications,[kernel,stdlib,elixir]}]}.
+              {vsn,"3.1.0"}]}.

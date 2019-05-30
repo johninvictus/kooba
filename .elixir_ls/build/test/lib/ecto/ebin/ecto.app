@@ -1,5 +1,7 @@
 {application,ecto,
-             [{description,"A database wrapper and language integrated query for Elixir"},
+             [{applications,[kernel,stdlib,elixir,logger,decimal,poolboy,
+                             crypto]},
+              {description,"A database wrapper and language integrated query for Elixir"},
               {modules,['Elixir.Collectable.Ecto.Adapters.SQL.Stream',
                         'Elixir.Ecto','Elixir.Ecto.Adapter',
                         'Elixir.Ecto.Adapter.Migration',
@@ -125,8 +127,6 @@
                         'Elixir.String.Chars.Ecto.Time']},
               {registered,[]},
               {vsn,"2.2.8"},
-              {applications,[kernel,stdlib,elixir,logger,decimal,poolboy,
-                             crypto]},
               {env,[{json_library,'Elixir.Poison'},
                     {postgres_map_type,<<"jsonb">>}]},
               {mod,{'Elixir.Ecto.Application',[]}}]}.

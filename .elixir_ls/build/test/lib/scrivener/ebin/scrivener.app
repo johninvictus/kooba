@@ -1,8 +1,8 @@
 {application,scrivener,
-             [{description,"Pagination for the Elixir ecosystem"},
+             [{applications,[kernel,stdlib,elixir,logger]},
+              {description,"Pagination for the Elixir ecosystem"},
               {modules,['Elixir.Enumerable.Scrivener.Page','Elixir.Scrivener',
                         'Elixir.Scrivener.Config','Elixir.Scrivener.Page',
                         'Elixir.Scrivener.Paginater']},
               {registered,[]},
-              {vsn,"2.5.0"},
-              {applications,[kernel,stdlib,elixir,logger]}]}.
+              {vsn,"2.5.0"}]}.

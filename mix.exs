@@ -59,7 +59,9 @@ defmodule KoobaServer.Mixfile do
       {:elixir_xml_to_map, "~> 0.1"},
       {:fcmex, "~> 0.1.2"},
       {:scrivener_ecto, "~> 1.0"},
-      {:scrivener_headers, "~> 3.0"}
+      {:scrivener_headers, "~> 3.0"},
+      {:comeonin, "~> 5.1"},
+      {:argon2_elixir, "~> 2.0"}
     ]
   end
 

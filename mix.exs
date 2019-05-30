@@ -60,8 +60,7 @@ defmodule KoobaServer.Mixfile do
       {:fcmex, "~> 0.1.2"},
       {:scrivener_ecto, "~> 1.0"},
       {:scrivener_headers, "~> 3.0"},
-      {:comeonin, "~> 5.1"},
-      {:argon2_elixir, "~> 2.0"}
+      {:argon2_elixir, "~> 2.0.5"}
     ]
   end
 

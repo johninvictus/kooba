@@ -1,7 +1,7 @@
 {application,kooba_server,
              [{applications,[kernel,stdlib,elixir,logger,runtime_tools,
                              httpoison,timex,exq,exq_ui,scrivener_ecto,
-                             gettext,poison,comeonin,argon2_elixir,fcmex,
+                             gettext,poison,argon2_elixir,fcmex,
                              elixir_xml_to_map,phoenix_pubsub,cowboy,
                              httpotion,cors_plug,scrivener_headers,phoenix,
                              guardian,postgrex,quantum,phoenix_ecto]},

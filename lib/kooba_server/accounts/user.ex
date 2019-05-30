@@ -65,7 +65,7 @@ defmodule KoobaServer.Accounts.User do
 
   defp put_password(changeset) do
     with %Ecto.Changeset{valid?: true, changes: changeset} do
-      hash_password = Comeonin.Argon2.hashpwsalt(changeset.password_string)
+      hash_password = Argon2.hash_pwd_salt(changeset.password_string)
       changeset |> put_change(:password, hash_password)
     end
   end

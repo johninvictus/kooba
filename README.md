@@ -13,7 +13,7 @@ Will update on how to test it.
 
 
 ### how to run it locally
-will update soon
 
-
-
+1. Run `mix deps.get` at the root of the project
+2. Create database. `mix ecto.create`
+3. Setup database. `mix ecto.Setup`
